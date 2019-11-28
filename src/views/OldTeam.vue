@@ -123,6 +123,7 @@ export default {
       //const path = `http://localhost:5000/groups`
       this.$http.get(URL).then((res) => {
         this.Groups = res.data
+        console.log(res.data)
         console.log(this.Groups)
       })
       .catch((error) => {
