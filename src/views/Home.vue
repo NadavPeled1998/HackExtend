@@ -41,16 +41,16 @@ export default {
     return {
       Groups: [],
       Group : {
-        groupname: "",
-        id: 1,
+        title: "",
         run: 1,
-        names: []
       },
+      name: [],
+      fl: [],
+      index: [],
       Next: true,
       val: 2,
       oval: 2,
       saved: false,
-      count: true,
       negative: false,
       results: false,
       start: "",
@@ -83,7 +83,6 @@ export default {
       let input = document.querySelector(".input");
       if (input.value > 1) {
         this.negative = false;
-        //this.count = false;
         //this.Next = true;
         let names = document.querySelector(".names");
         console.log(names);
@@ -158,9 +157,9 @@ export default {
             this.arr[i] = {};
             this.arr[i].name = inputs[i].value;
             console.log(inputs[i].value);
-            this.arr[i].id = i + 1;
             this.arr[i].fl = 0;
             console.log(this.arr[i]);
+            this.arr[i].index = 0;
           }
           console.log(this.arr);
           this.Next = false;
@@ -270,6 +269,10 @@ export default {
           randomize[0].fl = 1
           randomize[randomize.length-1].fl = 1
           this.arr = randomize
+          for(let i = 0; i<this.arr.length; i++){
+          this.arr[i].index = i
+        }
+        console.log(this.arr[3].index)
           console.log(randomize)
       let run = document.createElement("DIV")
         run.innerHTML= "run: " + 1
@@ -287,6 +290,10 @@ export default {
       if (!this.k && !this.s && !this.e) {
         this.arr[0].fl = 1;
         this.arr[this.arr.length - 1].fl = 1;
+        for(let i = 0; i<this.arr.length; i++){
+          this.arr[i].index = i
+        }
+        console.log(this.arr[3].index)
         this.results = true;
         let result = document.querySelector(".result");
         for (let i = 0; i < this.arr.length; i++) {
@@ -345,7 +352,8 @@ export default {
       })
     },
     AddGroups(payload){
-      this.$http.post(URL, payload).then(() =>{
+      const path = `http://localhost:5000/groups`
+      this.$http.post(path, payload).then(() =>{
         this.GetGroups();
       })
       .catch((error) => {
@@ -356,26 +364,22 @@ export default {
       save(){
         this.GetGroups();
         let group = prompt("איך לקרוא לקבוצה?")
-        this.Group.groupname = group;
-        /*let gr = [];
-        for(let i =0; i<this.Groups.length; i++){
-        gr[i] = this.Groups[i].id 
-        }
-        if(gr.length>0){
-        this.Group.id = Math.max(...gr) +1;
-        }else{
-        this.Group.id = 1;
-        }*/
+        this.Group.title = group;
         this.Group.run = 1;
-        this.Group.names = this.arr;
+        for(let i = 0;i<this.arr.length; i++){
+          this.name.push(this.arr[i].name)
+          this.fl.push(this.arr[i].fl)
+          this.index.push(this.arr[i].index)
+        };
         const payload = {
-          groupname: this.Group.groupname,
-          //id: this.Group.id,
+          title: this.Group.title,
           run: this.Group.run,
-          names: this.Group.names
+          name: this.name,
+          fl: this.fl,
+          index: this.index
         }
         console.log(payload)
-        //this.AddGroups(payload)
+        this.AddGroups(payload)
         this.saved = true;
       }
   }
