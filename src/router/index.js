@@ -4,6 +4,7 @@ import Home from "../views/Home.vue";
 import First from "../views/First.vue";
 import Exist from "../views/OldTeam.vue";
 import Contact from "../views/Contact.vue";
+import Mi from "../views/mi.vue";
 
 Vue.use(VueRouter);
 
@@ -22,11 +23,16 @@ const routes = [
     path: "/exist",
     name: "exist",
     component: Exist
-  }, 
+  },
   {
     path: "/contact",
     name: "contact",
     component: Contact
+  },
+  {
+    path:"/mi",
+    name: "mi",
+    component: Mi
   }
 ];
 
