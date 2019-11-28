@@ -20,9 +20,6 @@ export default {
 </script>
 <style>
   body{
-  background-image: url("../assets/background4.jpg"); 
-  background-repeat: no-repeat;
-  background-size: cover;
   direction: rtl;
   }
   .First{

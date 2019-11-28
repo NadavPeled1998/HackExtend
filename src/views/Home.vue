@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { URL } from "@/services/config.js"
+//import { URL } from "@/services/config.js"
 
 export default {
   name: "home",
@@ -344,8 +344,10 @@ export default {
       }
     },
     GetGroups(){
-      this.$http.get(URL).then((res) => {
-        this.Groups = res.data;
+      const path = `http://localhost:5000/groups`
+      this.$http.get(path).then((res) => {
+        this.Groups = res.data.groups;
+        console.log(this.Groups)
       })
       .catch((e) => {
         console.log(e);

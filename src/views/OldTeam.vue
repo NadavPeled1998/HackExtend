@@ -62,7 +62,7 @@
 <script>
 import steam from "@/components/team.vue";
 import less from "@/components/less.vue";
-import { URL } from "@/services/config.js";
+//import { URL } from "@/services/config.js";
 
 export default {
   name: "Exist",
