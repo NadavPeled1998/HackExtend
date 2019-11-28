@@ -1,39 +1,55 @@
 <template>
   <div class="home">
-    <div v-if="Next">
-      <p>how many friends do you have in your team?</p>
-      <input type="number" class="input" min="2" v-model="val" @input="numbers" /> <br />
-      <div v-if="negative">you must have atleast two people to be a group</div>
-      <button @click="numbers">Let's Go</button>
+        <div class="topnav">
+        <router-link to="/">בית</router-link>
+        <router-link to="/newteam" class="active"> צור קבוצה</router-link>
+        <router-link to="/exist">קבוצות קיימות</router-link>
+        <router-link to="/contact">צור קשר</router-link>
+        <router-link to="/mi" >מי אנחנו</router-link>
+        <router-link to="/" class="logo"><img src="/images\logosh.png" height=18px></router-link>
+        </div>
+        <div v-if="Next">
+            <div class="kamahav">
+                  <img src="/images\kama.png" height=100px class="ask">
+                 <el-input-number v-model="num" class="input" @change="numbers" :min="2" :max="100"></el-input-number>
+            </div>
+        </div>
+        <div v-if="Next" class="mahash">
+              <img src="/images\ma.png" height=100px class="ask">
+              <div class="names" v-show="Next">
+              </div>
+              <div v-if="k">שכחת להכניס שם
+              </div>
+        </div>
+          <div v-show="Next">
+                <div class="admatai">
+                      <span><img src="/images\admatai.png" height=150px class="ask"></span>
+
+                          <div class="timepart">
+                            <input type="time" class="time" />
+                             <input type="time" class="time" />
+                </div>
+                  <br>
+          </div>
+          <div v-if="s">לא הכנסת שעת התחלה
+          </div>
+          <div v-if="e">לא הכנסת שעת סיום</div>
+
+                <button @click="Allrandom" class="button3">רשימה רנדומלית</button>
+                <button @click="noChange" class="button3">רשימה לפי הסדר</button>
+          </div>
+          <div v-show="results">
+            <div class="result"></div>
+            <button @click ="save" v-if="!saved" class="button1">שמור בשם</button>
+            <button v-if="saved" >שמור</button>
+            <router-link to="/" class="button2">אל תשמור</router-link>
+
+          </div>
     </div>
-    <div v-if="Next">
-      <p>what's your names?</p>
-      <button @click="add">+</button>
-      <button @click="less">-</button>
-    </div>
-    <div class="names" v-show="Next"></div>
-    <div v-if="k">all inputs must have names</div>
-    <div v-show="Next">
-      <p>which hours?</p>
-      <span>Start</span><input type="time" class="time" /> <span>End</span
-      ><input type="time" class="time" /><br />
-      <div v-if="s">When do you start?</div>
-      <div v-if="e">when do you end?</div>
-      <button @click="Allrandom">Let's random</button>
-      <button @click="noChange">don't change the order</button>
-    </div>
-    <div v-show="results">
-      <div class="result"></div>
-      <button @click ="save" v-if="!saved">Save as</button>
-      <button v-if="saved">Saved</button>
-      <router-link to="/">don't save</router-link>
-      
-    </div>
-  </div>
 </template>
 
 <script>
-import { URL } from "@/services/config.js"
+//import { URL } from "@/services/config.js"
 
 export default {
   name: "home",
@@ -44,6 +60,7 @@ export default {
         title: "",
         run: 1,
       },
+      num: 2,
       name: [],
       fl: [],
       index: [],
@@ -64,7 +81,7 @@ export default {
       group: "",
       id: "",
       run: 1,
-      names: [],     
+      names: [],
     };
   },
   mounted(){
@@ -79,23 +96,26 @@ export default {
         }
   },
   methods: {
+  handleChange(value) {
+       console.log(value)
+     },
     numbers() {
-      let input = document.querySelector(".input");
-      if (input.value > 1) {
+      //let input = document.querySelector(".input");
+      if (this.num > 1) {
         this.negative = false;
         //this.Next = true;
         let names = document.querySelector(".names");
         console.log(names);
-        let inputs = document.querySelectorAll(".name");
-        if(inputs.length>1){
+        //let inputs = document.querySelectorAll(".name");
+        if(this.oval>1){
         for(let i = 0; i<this.oval; i++){
             let names = document.querySelector(".names");
             let input = document.querySelector(".name");
             names.removeChild(input);
         }
         }
-        this.oval = this.val
-        for (let i = 0; i < input.value; i++) {
+        this.oval = this.num
+        for (let i = 0; i < this.num; i++) {
           let div = document.createElement("DIV");
           let x = document.createElement("INPUT");
           x.className = "name";
@@ -234,6 +254,7 @@ export default {
           this.minute1[i] = "0" + this.minute1[i];
         }
         let div = document.createElement("DIV");
+        //div.className("")
         result.appendChild(div);
         if (i == 0) {
           div.innerHTML =
@@ -275,8 +296,8 @@ export default {
         console.log(this.arr[3].index)
           console.log(randomize)
       let run = document.createElement("DIV")
-        run.innerHTML= "run: " + 1
-        result.appendChild(run) 
+        run.innerHTML= "סבב: 1"
+        result.appendChild(run)
     },
     Allrandom() {
       this.MakeArray();
@@ -288,12 +309,13 @@ export default {
     noChange() {
       this.MakeArray();
       if (!this.k && !this.s && !this.e) {
+      console.log("hello")
         this.arr[0].fl = 1;
         this.arr[this.arr.length - 1].fl = 1;
         for(let i = 0; i<this.arr.length; i++){
           this.arr[i].index = i
         }
-        console.log(this.arr[3].index)
+        //console.log(this.arr[3].index)
         this.results = true;
         let result = document.querySelector(".result");
         for (let i = 0; i < this.arr.length; i++) {
@@ -339,8 +361,8 @@ export default {
         this.arr[0].fl = 1;
         this.arr[this.arr.length-1].fl = 1
         let run = document.createElement("DIV")
-        run.innerHTML= "run: " + 1
-        result.appendChild(run) 
+        run.innerHTML= "סבב: 1"
+        result.appendChild(run)
       }
     },
     GetGroups(){

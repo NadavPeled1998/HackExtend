@@ -1,8 +1,16 @@
 <template>
   <div>
+  <div class="topnav">
+  <router-link to="/">בית</router-link>
+  <router-link to="/newteam"> צור קבוצה</router-link>
+  <router-link to="/exist" class="active" >קבוצות קיימות</router-link>
+  <router-link to="/contact">צור קשר</router-link>
+  <router-link to="/mi" >מי אנחנו</router-link>
+  <router-link to="/" class="logo"><img src="/images\logosh.png" height=18px></router-link>
+  </div>
     <div v-if="!n">
-      <div v-if="ex">
-        <p>you havent made any group yet</p>
+      <div v-if="ex" class="loya">
+        <p>לא יצרת קבוצה עדיין</p>
       </div>
       <div v-if="!ex">
         <h2>Choose Group</h2>
@@ -15,7 +23,7 @@
         >
         </steam>
       </div>
-      <router-link to="/newteam">Create a New Team</router-link>
+      <router-link to="/newteam" class="button4">צור קבוצה חדשה</router-link>
     </div>
     <div v-if="n && !edi && !results">
       <button @click="back">come back</button>
@@ -44,15 +52,15 @@
         />
         <less @less="less" :id="member.id"> </less>
         <button v-show="member.id" @click="EditName(member.id)">
-          edit name
+          ערוך שם
         </button>
         <button v-show="!member.id" @click="EditedName(member.id)">
-          save name
+          שמור שם
         </button>
       </div>
-      <div v-if="!k">all inputs must have values</div>
-      <button @click="Add" v-if="edi">Add</button>
-      <div><button @click="Save">Save</button></div>
+      <div v-if="!k">אל תשאירו שדות ריקים</div>
+      <button @click="Add" v-if="edi">הוסף</button>
+      <div><button @click="Save">שמור</button></div>
     </div>
     <div class="result" v-show="results">
     <div>{{system}}</div>
@@ -62,7 +70,7 @@
 <script>
 import steam from "@/components/team.vue";
 import less from "@/components/less.vue";
-import { URL } from "@/services/config.js";
+//import { URL } from "@/services/config.js";
 
 export default {
   name: "Exist",
@@ -393,7 +401,7 @@ export default {
       let run = document.createElement("DIV")
         this.g.run += 1
         run.innerHTML= "run: " + this.g.run
-        result.appendChild(run) 
+        result.appendChild(run)
         this.system = "random";
     },
     Allrandom() {
@@ -452,7 +460,7 @@ export default {
         this.g.run += 1
         run.innerHTML= "run: " + this.g.run;
         this.system = "No Change";
-        result.appendChild(run) 
+        result.appendChild(run)
       }
     },
     KeepForward() {
@@ -511,7 +519,7 @@ export default {
         }let run = document.createElement("DIV")
         this.g.run += 1
         run.innerHTML= "run: " + this.g.run
-        result.appendChild(run) 
+        result.appendChild(run)
         this.system = "Kepp forward";
       }
     },
