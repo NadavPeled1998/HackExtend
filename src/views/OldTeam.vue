@@ -106,6 +106,7 @@ export default {
     };
   },
   mounted() {
+    //const path  =  `http://localhost:5000/groups`
     this.$http.get(URL).then((res) =>{
       this.Groups = res.data;
       console.log(res)
@@ -119,9 +120,10 @@ export default {
   },
   methods: {
     GetGroups(){
+      //const path = `http://localhost:5000/groups`
       this.$http.get(URL).then((res) => {
         this.Groups = res.data
-        console.log(res.data)
+        console.log(this.Groups)
       })
       .catch((error) => {
         console.log(error)
@@ -190,14 +192,7 @@ export default {
           //this.$http.put(URL/$this.g.id, )
           //document.querySelectorAll(less)
         }
-        /*const pay = {
-          groupname: this.g.groupname,
-          id: this.g.id,
-          run: this.g.run,
-          names: this.g.names
-        }*/
         const payload = {
-          id: member.id,
           name: member.name,
           fl: member.fl
         }
@@ -206,7 +201,7 @@ export default {
       }
     },
     UpdateName(payload, ID){
-      const path = `http://localhost:3500/${this.g.id}/${ID}`
+      const path = `http://localhost:5000/${ID}/member`
       this.$http.put(path, payload).then(() => {
         this.GetGroups();
       })
@@ -217,6 +212,8 @@ export default {
     },
     Add() {
       this.members.push({});
+      //const path = `http://localhost:5000/group/{}`
+      //this.$http.post(path, payload)
     },
 
     less(id) {
@@ -265,7 +262,7 @@ export default {
         console.log(this.l);
         console.log(inp);
         inp.parentNode.removeChild(inp);
-        const path = `http://localhost:3500/${this.g.id}/${id}`;
+        const path = `http://localhost:5000/group/${id}/member`;
         this.$http.delete(path).then(() => {
           this.GetGroups();
         })
