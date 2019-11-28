@@ -11,7 +11,7 @@
           v-for="team in teams"
           :key="team.id"
           :id="team.id"
-          :group="team.title"
+          :group="team.group"
         >
         </steam>
       </div>
@@ -62,10 +62,7 @@
 <script>
 import steam from "@/components/team.vue";
 import less from "@/components/less.vue";
-<<<<<<< HEAD
-//import { URL } from "@/services/config.js";
-=======
->>>>>>> 5757c839563172912e31ee7a760f35f76c046af6
+import { URL } from "@/services/config.js";
 
 export default {
   name: "Exist",
@@ -101,9 +98,9 @@ export default {
     };
   },
   mounted() {
-    const path  =  `http://localhost:5000/groups`
-    this.$http.get(path).then((res) =>{
-      this.Groups = res.data.groups;
+    //const path  =  `http://localhost:5000/groups`
+    this.$http.get(URL).then((res) =>{
+      this.Groups = res.data;
       console.log(res)
       console.log(this.Groups)
       this.teams = this.Groups;
@@ -115,9 +112,9 @@ export default {
   },
   methods: {
     GetGroups(){
-      const path = `http://localhost:5000/groups`
-      this.$http.get(path).then((res) => {
-        this.Groups = res.data.groups
+      //const path = `http://localhost:5000/groups`
+      this.$http.get(URL).then((res) => {
+        this.Groups = res.data
         console.log(this.Groups)
       })
       .catch((error) => {
