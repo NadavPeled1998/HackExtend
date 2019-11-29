@@ -33,10 +33,7 @@
 </template>
 
 <script>
-<<<<<<< HEAD
 //import { URL } from "@/services/config.js"
-=======
->>>>>>> 5757c839563172912e31ee7a760f35f76c046af6
 
 export default {
   name: "home",
@@ -350,10 +347,7 @@ export default {
       const path = `http://localhost:5000/groups`
       this.$http.get(path).then((res) => {
         this.Groups = res.data.groups;
-<<<<<<< HEAD
         console.log(this.Groups)
-=======
->>>>>>> 5757c839563172912e31ee7a760f35f76c046af6
       })
       .catch((e) => {
         console.log(e);

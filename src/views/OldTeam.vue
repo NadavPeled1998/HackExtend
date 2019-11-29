@@ -9,7 +9,7 @@
         <steam
           @show-team="showTeam"
           v-for="team in teams"
-          :key="team.id"
+          :key="team.index"
           :id="team.id"
           :group="team.title"
         >
@@ -62,10 +62,7 @@
 <script>
 import steam from "@/components/team.vue";
 import less from "@/components/less.vue";
-<<<<<<< HEAD
 //import { URL } from "@/services/config.js";
-=======
->>>>>>> 5757c839563172912e31ee7a760f35f76c046af6
 
 export default {
   name: "Exist",
@@ -76,6 +73,8 @@ export default {
   data() {
     return {
       Groups: [],
+      g: 0,
+      run: 2,
       ex: true,
       n: false,
       s: false,
@@ -87,7 +86,6 @@ export default {
       arr: [],
       hour1: [],
       minute1: [],
-      g: {},
       edi: false,
       edited: false,
       results: false,
@@ -124,11 +122,44 @@ export default {
         console.log(error)
       })
     },
+    GetMembers(id){
+      const path = `http://localhost:5000/group/${id}`
+      this.$http.get(path).then((res) => {
+        this.members = res.data.Member;
+        /*let memberim = res.data.Member;
+        console.log(memberim)
+        let index = [];
+        for(let i = 0;i<memberim.length;i++){
+          index.push(memberim[i].index)
+          console.log("hello")
+        }
+        index.sort();
+        console.log(index)
+        for(let k = 0; k<memberim.lengthl;k++){
+        for(let i = 0;i<memberim.length;i++){
+          if(index[k] == memberim[i].index){
+            this.members.push(memberim[i])
+            console.log(this.members)
+          }
+          else{
+            continue
+          }
+        }
+        }*/
+      })
+
+    },
     showTeam(id) {
-      const team = this.teams.find(team => team.id == id);
-      this.g = team;
-      this.members = team.names;
+      //const team = this.teams.find(team => team.id == id);
+      this.g = id;
+      for(let i = 0; i<this.Groups.length; i++){
+        if(this.g === this.Groups[i].id){
+          this.run = this.Groups[i].id
+        }
+      }
+      //this.members = team.names;
       this.n = true;
+      this.GetMembers(id);
     },
     back() {
       this.n = false;
@@ -139,31 +170,41 @@ export default {
     },
     EditName(id) {
       if (this.ed) {
-        console.log(id);
+        //console.log(id);
         const member = this.members.find(member => member.id == id);
-        console.log(member);
+        //console.log(member);
         for (let i = 0; i < 1; i++) {
           this.beid = member.id;
         }
         member.id = false;
         this.ed = false;
-        console.log(this.beid);
-        console.log(member.id);
       }
     },
     EditedName(id) {
       console.log(id)
       let input = document.querySelector(".name");
+      console.log(input.value)
       let member;
+      console.log(member)
+      //member.id = id;
       if (input.value) {
+        console.log("id")
+        console.log(id)
         if (id === false) {
-          console.log(input.value);
-          console.log(id);
-          let member = this.members.find(member => member.id == id);
+          member = this.members.find(member => member.id == id);
+          console.log("fssalss")
           member.id = this.beid;
-          console.log(member.id);
           member.name = input.value;
+        console.log("member")
+        console.log(member)
+        const payload = {
+          name: member.name,
+        }
+        this.ed = true;
+        console.log(member.id)
+        this.UpdateName(payload, member.id)
         } else {
+          console.log("hello")
           let ida = [];
           for (let i = 0; i < this.members.length - 1; i++) {
             ida.push(this.members[i].id);
@@ -172,31 +213,37 @@ export default {
           for (let i = 0; i < this.members.length - 1; i++) {
             fll.push(this.members[i].fl);
           }
-          this.members[this.members.length - 1].id = Math.max(...ida) + 1;
+          //this.members[this.members.length - 1].id = Math.max(...ida) + 1;
           this.members[this.members.length - 1].fl = Math.min(...fll);
+          let indexarr = []
+          for(let i = 0; i<this.members.length-1;i++){
+              indexarr.push(this.members[i].index)
+          }
+          console.log("indexarr")
+          console.log(indexarr)
+          this.members[this.members.length - 1].index = Math.max(...indexarr)+ 1 
           let idid = this.members[this.members.length - 1].id;
           console.log(idid);
           console.log(this.members[this.members.length - 1]);
-          const member = this.members.find(member => member.id == idid);
-          console.log(member.id);
           console.log(ida);
           console.log(this.members);
           this.members[this.members.length - 1].name = input.value;
-          this.members.push({});
-          this.members.pop();
-          //this.$http.put(URL/$this.g.id, )
-          //document.querySelectorAll(less)
+          const payload = {
+            name: input.value,
+            fl: this.members[this.members.length - 1].fl,
+            index: this.members[this.members.length - 1].index
+          }
+          this.AddName(payload, this.g)
+          this.ed = true;
+          this.GetMembers(this.g)
+          member = this.members.find(member => member.id == id);
+          //this.members.push({});
+          //this.members.pop();
         }
-        const payload = {
-          name: member.name,
-          fl: member.fl
-        }
-        this.ed = true;
-        this.UpdateName(payload, member.id)
       }
     },
     UpdateName(payload, ID){
-      const path = `http://localhost:5000/${ID}/member`
+      const path = `http://localhost:5000/group/${ID}/member`
       this.$http.put(path, payload).then(() => {
         this.GetGroups();
       })
@@ -210,14 +257,27 @@ export default {
       //const path = `http://localhost:5000/group/{}`
       //this.$http.post(path, payload)
     },
+    AddName(payload,ID){
+      const path = `http://localhost:5000/group/${ID}`
+      this.$http.post(path,payload).then(() => {
+        this.GetGroups
+      })
+      .catch((error) => {
+        console.log(error);
+        this.GetGroups
+      })
+    },
 
     less(id) {
+      console.log("id")
       console.log(id);
       const member = this.members.find(member => member.id == id);
       console.log(member.id);
       for (let i = 0; i < this.members.length; i++) {
         if (this.members[i].id === id) {
-          this.members.splice(i, 1);
+          let sp = this.members.splice(i, 1);
+          console.log("sp")
+          console.log(sp)
         }
       }
       console.log(this.members);
@@ -254,19 +314,29 @@ export default {
           }
         }
         this.l.push(member.id);
+        /*console.log("member");
+        console.log(member.id);
+        console.log("id");*/
         console.log(this.l);
         console.log(inp);
-        inp.parentNode.removeChild(inp);
+        console.log("member");
+        console.log(member.id);
+        this.DeleteName(member.id)
+        //inp.parentNode.removeChild(inp);
+      }
+    },
+      DeleteName(id){
         const path = `http://localhost:5000/group/${id}/member`;
         this.$http.delete(path).then(() => {
           this.GetGroups();
+          console.log("succed")
         })
         .catch((error) => {
           console.log(error);
+          console.log("deny")
           this.GetGroups();
         })
-      }//i did it very different then what is on the website
-    },
+      },//i did it very different then what is on the website
     Save() {
       if (this.k) {
         this.edi = false;
@@ -390,11 +460,39 @@ export default {
             this.minute1[i];
         }
       }
+      for(let i = 0; i<randomize.length;i++){
+        randomize[i].index = i
+      }
       let run = document.createElement("DIV")
-        this.g.run += 1
-        run.innerHTML= "run: " + this.g.run
-        result.appendChild(run) 
+        this.run += 1
+        run.innerHTML= "run: " + this.run
+        result.appendChild(run); 
         this.system = "random";
+        let idid = [];
+        for(let i = 0; i<randomize.length;i++){
+          idid.push(randomize[i].id)
+        }
+        idid.sort(function(a, b){return a - b});
+        console.log(idid)
+        let ind = [];
+        for(let k = 0;k<randomize.length;k++)
+        for(let i = 0; i<randomize.length;i++){
+          if (idid[k] == randomize[i].id){
+            ind.push(randomize[i].index)
+          }
+          else{
+            continue
+          }
+        }
+        console.log("ind");
+        console.log(ind);
+        console.log("idid")
+        console.log(idid)
+        console.log(randomize)
+         const payload = {
+           index: ind         
+         }
+         this.UpdateIndex(payload,this.g)
     },
     Allrandom() {
       this.MakeArray();
@@ -449,11 +547,40 @@ export default {
               this.minute1[i];
           }
         }let run = document.createElement("DIV")
-        this.g.run += 1
-        run.innerHTML= "run: " + this.g.run;
+        this.Group += 1
+        run.innerHTML= "run: " + this.run;
         this.system = "No Change";
-        result.appendChild(run) 
+        result.appendChild(run)
+       let idid = [];
+       let randomize = this.arr
+      for(let i = 0; i<randomize.length;i++){
+        randomize[i].index = i
       }
+        for(let i = 0; i<randomize.length;i++){
+          idid.push(randomize[i].id)
+        }
+        idid.sort(function(a, b){return a - b});
+        console.log(idid)
+        let ind = [];
+        for(let k = 0;k<randomize.length;k++)
+        for(let i = 0; i<randomize.length;i++){
+          if (idid[k] == randomize[i].id){
+            ind.push(randomize[i].index)
+          }
+          else{
+            continue
+          }
+        }
+        console.log("ind");
+        console.log(ind);
+        console.log("idid")
+        console.log(idid)
+        console.log(randomize)
+         const payload = {
+           index: ind         
+         }
+         this.UpdateIndex(payload,this.g)
+    }
     },
     KeepForward() {
       this.MakeArray();
@@ -509,11 +636,39 @@ export default {
               this.minute1[i];
           }
         }let run = document.createElement("DIV")
-        this.g.run += 1
-        run.innerHTML= "run: " + this.g.run
+        this.run += 1
+        run.innerHTML= "run: " + this.run
         result.appendChild(run) 
-        this.system = "Kepp forward";
+        this.system = "Kepp forward"; 
+      for(let i = 0; i<randomize.length;i++){
+        randomize[i].index = i
       }
+   let idid = [];
+        for(let i = 0; i<randomize.length;i++){
+          idid.push(randomize[i].id)
+        }
+        idid.sort(function(a, b){return a - b});
+        console.log(idid)
+        let ind = [];
+        for(let k = 0;k<randomize.length;k++)
+        for(let i = 0; i<randomize.length;i++){
+          if (idid[k] == randomize[i].id){
+            ind.push(randomize[i].index)
+          }
+          else{
+            continue
+          }
+        }
+        console.log("ind");
+        console.log(ind);
+        console.log("idid")
+        console.log(idid)
+        console.log(randomize)
+         const payload = {
+           index: ind         
+         }
+         this.UpdateIndex(payload,this.g)
+    }
     },
     FairRandom() {
       console.log("hello");
@@ -647,11 +802,51 @@ export default {
               this.minute1[i];
           }
         }let run = document.createElement("DIV")
-        this.g.run += 1
-        run.innerHTML= "run: " + this.g.run
+        this.run += 1
+        run.innerHTML= "run:" + this.run
         result.appendChild(run)
-         this.system = "Fair random";
+         this.system = "Fair random";  
+      for(let i = 0; i<randomize.length;i++){
+        randomize[i].index = i
       }
+        let idid = [];
+        for(let i = 0; i<randomize.length;i++){
+          idid.push(randomize[i].id)
+        }
+        idid.sort(function(a, b){return a - b});
+        console.log(idid)
+        let ind = [];
+        for(let k = 0;k<randomize.length;k++)
+        for(let i = 0; i<randomize.length;i++){
+          if (idid[k] == randomize[i].id){
+            ind.push(randomize[i].index)
+          }
+          else{
+            continue
+          }
+        }
+        console.log("ind");
+        console.log(ind);
+        console.log("idid")
+        console.log(idid)
+        console.log(randomize)
+        let fair = 1;
+         const payload = {
+           index: ind,
+           fairrandom: fair         
+         }
+         this.UpdateIndex(payload,this.g)
+    }
+    },
+    UpdateIndex(payload,ID){
+      const path = `http://localhost:5000/group/${ID}`
+      this.$http.put(path,payload).then(() => {
+          this.GetGroups();
+      })
+      .catch((error) => {
+        console.log(error);
+        this.GetGroups
+      })
     }
   }
 };
