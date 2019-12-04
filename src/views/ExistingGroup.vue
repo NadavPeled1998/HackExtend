@@ -1,6 +1,5 @@
 <template>
   <div>
-<<<<<<< HEAD:src/views/ExistingGroup.vue
     <div class="topnav">
       <router-link to="/">בית</router-link>
       <router-link to="/newgroup"> צור קבוצה</router-link>
@@ -14,19 +13,6 @@
     <div v-if="!n">
       <div v-if="ex" class="loya">
         <p>אין קבוצות קיימות למשתמש זה</p>
-=======
-  <div class="topnav">
-  <router-link to="/">בית</router-link>
-  <router-link to="/newteam"> צור קבוצה</router-link>
-  <router-link to="/exist" class="active" >קבוצות קיימות</router-link>
-  <router-link to="/contact">צור קשר</router-link>
-  <router-link to="/mi" >מי אנחנו</router-link>
-  <router-link to="/" class="logo"><img src="/images\logosh.png" height=18px></router-link>
-  </div>
-    <div v-if="!n">
-      <div v-if="ex" class="loya">
-        <p>לא יצרת קבוצה עדיין</p>
->>>>>>> b768921fa4cc6f34c95c093d4276eab8d248e7ee:src/views/OldTeam.vue
       </div>
       <div v-if="!ex">
         <h5 class="loya">בחר קבוצה</h5>
@@ -39,11 +25,7 @@
         >
         </steam>
       </div>
-<<<<<<< HEAD:src/views/ExistingGroup.vue
       <router-link to="/newgroup" class="button4">צור קבוצה חדשה</router-link>
-=======
-      <router-link to="/newteam" class="button4">צור קבוצה חדשה</router-link>
->>>>>>> b768921fa4cc6f34c95c093d4276eab8d248e7ee:src/views/OldTeam.vue
     </div>
     <div v-if="n && !edi && !results">
       <button @click="back" class="button1">חזור</button>
@@ -89,7 +71,6 @@
           :value="member.name"
         />
         <less @less="less" :id="member.id"> </less>
-<<<<<<< HEAD:src/views/ExistingGroup.vue
         <button v-show="member.id" class="button4" @click="EditName(member.id)">
           ערוך שם
         </button>
@@ -98,21 +79,10 @@
           class="button4"
           @click="EditedName(member.id)"
         >
-=======
-        <button v-show="member.id" @click="EditName(member.id)">
-          ערוך שם
-        </button>
-        <button v-show="!member.id" @click="EditedName(member.id)">
->>>>>>> b768921fa4cc6f34c95c093d4276eab8d248e7ee:src/views/OldTeam.vue
           שמור שם
         </button>
       </div>
       <div v-if="!k">אל תשאירו שדות ריקים</div>
-<<<<<<< HEAD:src/views/ExistingGroup.vue
-=======
-      <button @click="Add" v-if="edi">הוסף</button>
-      <div><button @click="Save">שמור</button></div>
->>>>>>> b768921fa4cc6f34c95c093d4276eab8d248e7ee:src/views/OldTeam.vue
     </div>
     <div class="result" v-show="results">
       <div>{{ system }}</div>
@@ -122,10 +92,6 @@
 <script>
 import steam from "@/components/team.vue";
 import less from "@/components/less.vue";
-<<<<<<< HEAD:src/views/ExistingGroup.vue
-=======
-//import { URL } from "@/services/config.js";
->>>>>>> b768921fa4cc6f34c95c093d4276eab8d248e7ee:src/views/OldTeam.vue
 
 export default {
   name: "Exist",
@@ -159,17 +125,9 @@ export default {
     };
   },
   mounted() {
-<<<<<<< HEAD:src/views/ExistingGroup.vue
     const path = `http://localhost:5000/groups`;
     this.$http.get(path).then(res => {
       this.Groups = res.data.groups;
-=======
-    //const path  =  `http://localhost:5000/groups`
-    this.$http.get(URL).then((res) =>{
-      this.Groups = res.data;
-      console.log(res)
-      console.log(this.Groups)
->>>>>>> b768921fa4cc6f34c95c093d4276eab8d248e7ee:src/views/OldTeam.vue
       this.teams = this.Groups;
       this.ex = false;
       if (this.Groups.length < 1) {
@@ -178,7 +136,6 @@ export default {
     });
   },
   methods: {
-<<<<<<< HEAD:src/views/ExistingGroup.vue
     GetGroups() {
       const path = `http://localhost:5000/groups`;
       this.$http
@@ -196,18 +153,6 @@ export default {
       this.$http.get(path).then(res => {
         this.members = res.data.Member;
       });
-=======
-    GetGroups(){
-      //const path = `http://localhost:5000/groups`
-      this.$http.get(URL).then((res) => {
-        this.Groups = res.data
-        console.log(res.data)
-        console.log(this.Groups)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
->>>>>>> b768921fa4cc6f34c95c093d4276eab8d248e7ee:src/views/OldTeam.vue
     },
     showTeam(id) {
       //const team = this.teams.find(team => team.id == id);
@@ -514,7 +459,6 @@ export default {
             this.minute1[i];
         }
       }
-<<<<<<< HEAD:src/views/ExistingGroup.vue
       for (let i = 0; i < randomize.length; i++) {
         randomize[i].index = i;
       }
@@ -544,13 +488,6 @@ export default {
         index: ind
       };
       this.UpdateIndex(payload, this.g);
-=======
-      let run = document.createElement("DIV")
-        this.g.run += 1
-        run.innerHTML= "run: " + this.g.run
-        result.appendChild(run)
-        this.system = "random";
->>>>>>> b768921fa4cc6f34c95c093d4276eab8d248e7ee:src/views/OldTeam.vue
     },
     Allrandom() {
       this.MakeArray();
@@ -603,7 +540,6 @@ export default {
               ":" +
               this.minute1[i];
           }
-<<<<<<< HEAD:src/views/ExistingGroup.vue
         }
         let run = document.createElement("DIV");
         this.Group += 1;
@@ -635,13 +571,6 @@ export default {
           index: ind
         };
         this.UpdateIndex(payload, this.g);
-=======
-        }let run = document.createElement("DIV")
-        this.g.run += 1
-        run.innerHTML= "run: " + this.g.run;
-        this.system = "No Change";
-        result.appendChild(run)
->>>>>>> b768921fa4cc6f34c95c093d4276eab8d248e7ee:src/views/OldTeam.vue
       }
     },
     KeepForward() {
@@ -697,7 +626,6 @@ export default {
               ":" +
               this.minute1[i];
           }
-<<<<<<< HEAD:src/views/ExistingGroup.vue
         }
         let run = document.createElement("DIV");
         this.run += 1;
@@ -727,13 +655,6 @@ export default {
           index: ind
         };
         this.UpdateIndex(payload, this.g);
-=======
-        }let run = document.createElement("DIV")
-        this.g.run += 1
-        run.innerHTML= "run: " + this.g.run
-        result.appendChild(run)
-        this.system = "Kepp forward";
->>>>>>> b768921fa4cc6f34c95c093d4276eab8d248e7ee:src/views/OldTeam.vue
       }
     },
     FairRandom() {
