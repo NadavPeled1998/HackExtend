@@ -22,7 +22,8 @@ CORS(app, resources={r'/*': {'origins': '*'}})
 # CODE START
 
 
-# (get) get a specific list of member inside a group, (post) add new member to a specific group , (put) update a specific group and members detail , (delete) delete group
+# (GET) get a specific list of member inside a group, (POST) add new member to a specific group , 
+#(PUT) update a specific group and members detail , (DELETE) delete group
 
 
 @app.route('/group/<group_ids>', methods=['GET', 'POST', 'PUT', 'DELETE'])
