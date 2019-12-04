@@ -1,32 +1,38 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
-import First from "../views/First.vue";
-import Exist from "../views/OldTeam.vue";
+import NewGroup from "../views/NewGroup.vue";
+import ExistingGroup from "../views/ExistingGroup.vue";
 import Contact from "../views/Contact.vue";
+import About from "../views/About.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    name: "first",
-    component: First
-  },
-  {
-    path: "/newteam",
     name: "home",
     component: Home
   },
   {
-    path: "/exist",
-    name: "exist",
-    component: Exist
-  }, 
+    path: "/newgroup",
+    name: "newgroup",
+    component: NewGroup
+  },
+  {
+    path: "/existing",
+    name: "existing",
+    component: ExistingGroup
+  },
   {
     path: "/contact",
     name: "contact",
     component: Contact
+  },
+  {
+    path: "/about",
+    name: "about",
+    component: About
   }
 ];
 
