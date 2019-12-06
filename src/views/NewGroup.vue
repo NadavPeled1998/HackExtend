@@ -35,16 +35,65 @@
         </div>
         <br />
       </div>
-      <button @click="Allrandom" class="button3">רשימה רנדומלית</button>
-      <button @click="noChange" class="button3">רשימה לפי הסדר</button>
+      <button @click="Allrandom" class="button">רשימה רנדומלית</button>
+      <button @click="noChange" class="button">רשימה לפי הסדר</button>
     </div>
     <div v-show="results">
       <div class="result"></div>
-      <button @click="save" v-if="!saved" class="button1">
+      <div v-if="username">
+      <button @click="save" v-if="!saved" class="save">
         שמור בשם
       </button>
-      <button v-if="saved" class="button1">נשמר</button>
-      <router-link to="/" v-if="!saved" class="button2">אל תשמור</router-link>
+      <button v-if="saved" class="saved">נשמר</button>
+      <router-link to="/" v-if="!saved" class="DontSave">אל תשמור</router-link>
+    </div>
+    <div v-if="!username">
+     <p>
+        בשביל לשמור את הקבוצה ולהשתמש בה שוב ושוב יש
+        <button
+          @click="
+            Sign = true;
+            log = false;
+          "
+        >
+          להירשם לאתר
+        </button>
+        או
+        <button
+          @click="
+            log = true;
+            Sign = false;
+          "
+        >
+          להתחבר למשתמש קיים
+        </button>
+      </p>
+    <div class="sign signin" v-if="Sign">
+        <p>הרשם לאתר:</p>
+        <label>שם משתמש:</label>
+        <input type="text" @input="Check" class="Susername" />
+        <div v-if="CheckUser">
+          שם המשתמש {{ Susername }} <span v-if="aviable">זמין</span
+          ><span v-if="!aviable">לא זמין</span>
+        </div>
+        <label>דוא"ל:</label>
+        <input type="email" class="Semail" />
+        <label>סיסמא:</label>
+        <input type="password" class="Spassword" />
+        <div>{{ Msign }}</div>
+        <button @click="sign">הירשם</button>
+      </div>
+      <div class="sign login" v-if="log">
+        <p>יש לך כבר משתמש קיים?</p>
+        <label>שם משתמש:</label>
+        <input type="text" class="Lusername" />
+        <label>סיסמא:</label>
+        <input type="password" class="Lpassword" />
+        <div>{{ Mlogin }}</div>
+        <button @click="login">התחבר</button>
+        <p class="forgot">שכחת את הסיסמא?</p>
+      </div>
+    </div>
     </div>
   </div>
 </template>
@@ -59,12 +108,14 @@ export default {
         title: "",
         run: 1
       },
+      Mlogin: "",
+      Msign: "",
       num: 2,
       name: [],
       fl: [],
       index: [],
       log: false,
-      sign: false,
+      Sign: false,
       Next: true,
       val: 2,
       oval: 2,
@@ -82,7 +133,11 @@ export default {
       group: "",
       id: "",
       run: 1,
-      names: []
+      names: [], 
+      username: false,
+      Susername: "",
+      aviable: "",
+      CheckUser: false,
     };
   },
   mounted() {
@@ -140,6 +195,112 @@ export default {
         let input = document.querySelector(".name");
         names.removeChild(input);
       }
+    },
+    sign() {
+      let Susername = document.querySelector(".Susername").value;
+      let Semail = document.querySelector(".Semail").value;
+      let Spassword = document.querySelector(".Spassword").value;
+      console.log(Spassword);
+      console.log(Susername);
+      console.log(Semail);
+      const pay = {
+        email: Semail,
+        gmail: true
+      };
+      const payload = {
+        username: Susername,
+        password: Spassword,
+        email: Semail
+      };
+      console.log(payload);
+      this.CheckEmail(pay, payload);
+    },
+    SignIn(payload) {
+      const path = `http://localhost:5000/users`;
+      this.$http
+        .post(path, payload)
+        .then(res => {
+          console.log(payload);
+          this.username = true;
+          this.Groups = [];
+          this.teams = this.Groups;
+          this.ex = true;
+          console.log(res.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    CheckEmail(pay, payload) {
+      const path = `http://localhost:5000/check`;
+      this.$http
+        .post(path, pay)
+        .then(res => {
+          console.log(res.data.email);
+          if (res.data.email == true) {
+            this.SignIn(payload);
+          } else {
+            this.Msign = "יש כבר משתמש עם המייל הזה";
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    Check() {
+      let Susername = document.querySelector(".Susername").value;
+      this.CheckUser = false;
+      if (Susername.length > 5 && Susername.length < 13) {
+        this.CheckUser = true;
+        this.Susername = Susername;
+        const payload = {
+          username: Susername,
+          name: true
+        };
+        console.log(payload);
+        this.CheckUserName(payload);
+      }
+    },
+    CheckUserName(payload) {
+      const path = `http://localhost:5000/check`;
+      this.$http
+        .post(path, payload)
+        .then(res => {
+          this.aviable = res.data.name;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    login() {
+      let Lusername = document.querySelector(".Lusername");
+      let Lpassword = document.querySelector(".Lpassword");
+      const payload = {
+        username: Lusername.value,
+        password: Lpassword.value,
+        get: true
+      };
+      console.log(payload);
+      this.Log(payload);
+    },
+    Log(payload) {
+      const path = `http://localhost:5000/groups`;
+      this.$http
+        .post(path, payload)
+        .then(res => {
+          if (res.data.message == "not vaild useranme") {
+            this.Mlogin = "שם משתמש לא קיים במערכת";
+            console.log("hello")
+          } else if (res.data.message == "worng password") {
+            this.Mlogin = "שם משתמש או סיסמא לא נכונים";
+          } else {
+            this.Mlogin = "";
+            this.username = true;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     MakeArray() {
       let inputs = document.querySelectorAll(".name");
@@ -409,3 +570,30 @@ export default {
   }
 };
 </script>
+<style scoped>
+.button {
+  margin-left: 3%;
+  margin-top: 7%;
+}
+.save {
+  margin-left: 38%;
+}
+.saved {
+  margin-left: 46.5%;
+}
+.DontSave {
+  background-color: #4caf50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 40px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 8px;
+  margin-left: 3%;
+  /*margin-right:50%;*/
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+</style>

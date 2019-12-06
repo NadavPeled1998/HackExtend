@@ -3,7 +3,8 @@ from flask_cors import CORS
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Group, Member
+from data_setup import Base, Group, Member, User
+import uuid
 
 # Basic
 
@@ -22,141 +23,95 @@ CORS(app, resources={r'/*': {'origins': '*'}})
 # CODE START
 
 
-# (get) get a specific list of member inside a group, (post) add new member to a specific group , (put) update a specific group and members detail , (delete) delete group
 
-
-@app.route('/group/<group_ids>', methods=['GET', 'POST', 'PUT', 'DELETE'])
-def menuItemJSON(group_ids):
+# check if username or email is valid or not
+@app.route('/check', methods=['POST'])
+def check():
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
     response_object = {'status': 'success'}
 
-
-    #delete group
-
-    if request.method == 'DELETE':
-        #delte group
-        groupD = session.query(Group).filter_by(id = group_ids).one()
-        session.delete(groupD)
-        session.commit()
-        #delte all members of the group
-        membersD = session.query(Member).filter_by(group_id = group_ids).all()
-        #print(membersD)
-        for member in membersD:
-            #print("name: " + member.name)
-            #member.id = str(member.id)
-            #print("id: " + member.id)
-            session.delete(member)
-            session.commit()
-        response_object['message'] = 'Group deleted!!'
-
-
-
-    # update a specific group and members detail
-
-    if request.method == 'PUT':
-        group1 = session.query(Group).filter_by(id=group_ids).one()
-        group1.run += 1
-        session.add(group1)
-        session.commit()
-        post_data = request.get_json()
-
-        indexs = post_data.get('index')
-        #ALSO change fl
-        if post_data.get('fairrandom') == True:
-            member1 = session.query(Member).filter_by(group_id=group_ids).all()
-            for num in range(len(indexs)):
-                place = 0
-                for item in member1:
-                    if place == num:
-                        item.index = indexs[num]
-                        if item.index == 0 or item.index == (len(indexs) -1):
-                            item.fl += 1
-                        session.add(item)
-                        session.commit()
-                        break
-                    if place > num:
-                        break
-                    else:
-                        place += 1
-        #NOT change fl
-        else:
-            member1 = session.query(Member).filter_by(group_id=group_ids).all()
-            for num in range(len(indexs)):
-                place = 0
-                for item in member1:
-                    if place == num:
-                        item.index = indexs[num]
-                        #if item.index == 0 or item.index == (len(indexs) - 1):
-                            #item.fl += 1
-                        session.add(item)
-                        session.commit()
-                        break
-                    if place > num:
-                        break
-                    else:
-                        place += 1
-
-        response_object['message'] = 'Mambers and Group Updated!!'
-
-
-
-    #add new member to a specific group
-
     if request.method == 'POST':
         post_data = request.get_json()
-        itemA = Member(group_id=group_ids)
-        items = session.query(Member).filter_by(group_id=group_ids).all()
-        for item in items:
-            item.index += 1
-            session.add(item)
-            session.commit()
-        itemA.name = post_data.get('name')
-        itemA.fl = post_data.get('fl')
-        itemA.index = post_data.get('index')
-        session.add(itemA)
-        session.commit()
 
-        response_object['message'] = 'Mamber added!'
+        #check for email
+        if post_data.get('gmail') == True:
+            #post_data = request.get_json()
+            try:
 
+                # check if the user exists
+                user1 = session.query(User).filter_by(email= post_data.get('email')).one()
+                response_object['email'] = False
+            # error
+            except:
+                response_object['email'] = True
 
+        #check for username
+        if post_data.get('name') == True:
 
-    # get a specific list of member inside a group
+            #post_data = request.get_json()
+            try:
 
-    if request.method == 'GET':
-        items = session.query(Member).filter_by(group_id=group_ids).all()
-        indexs = []
-        for item in items:
-            indexs.append(item.index)
-        # to orginaze by sort index
-        j = sorted(indexs)
-        name = []
-        for cuc in range(len(j)):
-            for item in items:
-                if item.index == j[cuc]:
-                    name.append(item.serialize)
-                    break
-        response_object['Member'] = name
+                # check if the user exists
+                user1 = session.query(User).filter_by(username=post_data.get('username')).one()
+                response_object['name'] = False
+            # error
+            except:
+                response_object['name'] = True
     return jsonify(response_object)
 
 
 
 
+# (get) all the users , (post) add new user
+@app.route('/users', methods=['GET', 'POST'])
+def noname():
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
+    response_object = {'status': 'success'}
 
-# (get) get all the groups , (post)add new group
+    if request.method == 'POST':
+        #try:
+            post_data = request.get_json()
+            print(post_data.get('username'))
+            print(post_data.get('password'))
+            print(post_data.get('email'))
+            user1 = User(username= post_data.get('username'))
+            user1.password = post_data.get('password')
+            user1.email = post_data.get('email')
+            user1.id = uuid.uuid4().hex
+            session.add(user1)
+            session.commit()
+
+            response_object['message'] = 'User add!!'
+
+        #except:
+            #response_object['message'] = 'User canont add... meaby worng input?'
+
+    if request.method == 'GET':
+        users = session.query(User).all()
+        response_object['users'] = [i.serialize for i in users]
+
+    return jsonify(response_object)
+
+
+
+
+# (get) get all the groups of a user , (post)add new group to user
 @app.route('/groups', methods=['GET', 'POST'])
 def all_books():
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
     response_object = {'status': 'success'}
+    post_data = request.get_json()
 
 
     # add new group
 
-    if request.method == 'POST':
+    if request.method == 'POST' and post_data.get('add') == True:
         post_data = request.get_json()
         # details of the group
-        group1 = Group(title=post_data.get('title'), run=post_data.get('run'))
+        group1 = Group(user_id = post_data.get('id'), title=post_data.get('title'), run=post_data.get('run'))
         session.add(group1)
         session.commit()
         # details of the members
@@ -164,6 +119,7 @@ def all_books():
         #print(names)
         fls = (post_data.get('fl'))
         indexs = (post_data.get('index'))
+
         for num in range(len(names)):
             member1 = Member(name=names[num], group=group1, group_id=group1.id, fl=fls[num], index=indexs[num])
             session.add(member1)
@@ -171,67 +127,32 @@ def all_books():
         response_object['message'] = 'Group added!'
 
 
-    # all the groups
 
-    if request.method == 'GET':
-        items = session.query(Group).all()
-        response_object['groups'] = [i.serialize for i in items]
-        # return jsonify(Group=[i.id for i in items])
-    return jsonify(response_object)
+    # all the groups of a user
 
+    if request.method == 'POST' and post_data.get('get') == True:
+        print(post_data.get('username'))
+        print(post_data.get('password'))
+        try:
 
+            #check if the user exists
+            user1 = session.query(User).filter_by(username = post_data.get('username')).one()
 
+            #check if the password is corcct
+            if user1.password == post_data.get('password'):
 
+                #getAction
+                items = session.query(Group).filter_by(user_id = user1.id).all()
+                response_object['groups'] = [i.serialize for i in items]
+            else:
+                response_object['message'] = 'worng password'
 
-# (put) edit a specific member, (delete) delete a specific member and updeat the rest fo the group automatic
-@app.route('/group/<member_ids>/member', methods=['PUT', 'DELETE'])
-def updet_member(member_ids):
-    DBSession = sessionmaker(bind=engine)
-    session = DBSession()
-    response_object = {'status': 'success'}
-
-
-    # edit a specific member
-
-    if request.method == 'PUT':
-        # specific the group
-        item = session.query(Member).filter_by(id=member_ids).one()
-        post_data = request.get_json()
-        # details of the member
-        if post_data.get('name'):
-            item.name = post_data.get('name')
-        if post_data.get('fl'):
-            item.fl = post_data.get('fl')
-        if post_data.get('index'):
-            item.index = post_data.get('index')
-        session.add(item)
-        session.commit()
-        response_object['message'] = 'Group added!'
-
-
-    # delete a specific member and updeat the rest fo the group automatic
-
-    if request.method == 'DELETE':
-        ditem = session.query(Member).filter_by(id=member_ids).one()
-        idG = ditem.group_id
-        amout = ditem.index
-        #delete a specific member
-        session.delete(ditem)
-        session.commit()
-        items = session.query(Member).filter_by(group_id = idG).all()
-        #updeat the rest fo the group automatic
-        for item in items:
-            if amout < item.index:
-                item.index -= 1
-                session.add(item)
-                session.commit()
-
-        response_object['message'] = 'Member removed!'
+        #error
+        except:
+            response_object['message'] = 'not vaild useranme'
 
 
     return jsonify(response_object)
-
-
 
 
 # CODE END

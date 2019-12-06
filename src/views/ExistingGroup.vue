@@ -10,82 +10,122 @@
         ><img src="/images\logosh.png" height="18px"
       /></router-link>
     </div>
-    <div v-if="!n">
-      <div v-if="ex" class="loya">
-        <p>אין קבוצות קיימות למשתמש זה</p>
+    <div v-if="!username" class="username">
+      <p>
+        בשביל להשתמש באותן קבוצות שוב ושוב יש להתחבר למשתמש קיים או ליצור חדש.
+      </p>
+      <div class="sign signin">
+        <p>הרשם לאתר:</p>
+        <label>שם משתמש:</label>
+        <input type="text" @input="Check" class="Susername" />
+        <div v-if="CheckUser">
+          שם המשתמש {{ Susername }} <span v-if="aviable">זמין</span
+          ><span v-if="!aviable">לא זמין</span>
+        </div>
+        <label>דוא"ל:</label>
+        <input type="email" class="Semail" />
+        <label>סיסמא:</label>
+        <input type="password" class="Spassword" />
+        <div>{{ Msign }}</div>
+        <button @click="sign">הירשם</button>
       </div>
-      <div v-if="!ex">
-        <h5 class="loya">בחר קבוצה</h5>
-        <steam
-          @show-team="showTeam"
-          v-for="team in teams"
-          :key="team.id"
-          :id="team.id"
-          :group="team.group"
+      <div class="sign login">
+        <p>יש לך כבר משתמש קיים?</p>
+        <label>שם משתמש:</label>
+        <input type="text" class="Lusername" />
+        <label>סיסמא:</label>
+        <input type="password" class="Lpassword" />
+        <div>{{ Mlogin }}</div>
+        <button @click="login">התחבר</button>
+        <p class="forgot">שכחת את הסיסמא?</p>
+      </div>
+    </div>
+    <div v-if="username">
+      <div v-if="!n">
+        <div v-if="ex" class="loya">
+          <p>אין קבוצות קיימות למשתמש זה</p>
+        </div>
+        <div v-if="!ex">
+          <h5 class="loya">בחר קבוצה</h5>
+          <steam
+            @show-team="showTeam"
+            v-for="team in teams"
+            :key="team.id"
+            :id="team.id"
+            :group="team.group"
+          >
+          </steam>
+        </div>
+        <router-link to="/newgroup" class="NewGroup"
+          >צור קבוצה חדשה</router-link
         >
-        </steam>
       </div>
-      <router-link to="/newgroup" class="button4">צור קבוצה חדשה</router-link>
-    </div>
-    <div v-if="n && !edi && !results">
-      <button @click="back" class="button1">חזור</button>
-      <button @click="Edit" class="button2">ערוך</button><br />
-      <button @click="DeleteGroup" class="button1">מחק קבוצה</button>
-      <div>
-        <div class="memebersh">
-          <h5>{{ g.group }}</h5>
+      <div v-if="n && !edi && !results">
+        <button @click="back" class="back">חזור</button>
+        <button @click="Edit" class="edit">ערוך</button><br />
+        <button @click="DeleteGroup" class="DeleteGroup">מחק קבוצה</button>
+        <div>
+          <div class="memebersh">
+            <h5>{{ g.group }}</h5>
+          </div>
+        </div>
+        <div class="members">
+          <div v-for="member in members" :key="member.id">
+            {{ member.name }}
+          </div>
+        </div>
+        <div class="admatai">
+          <span
+            ><img src="/images\admatai.png" height="150px" class="ask"
+          /></span>
+          <div class="timepart" :class="{ error: s || e }">
+            <input type="time" class="time" />
+            <input type="time" class="time" />
+          </div>
+          <br />
+        </div>
+        <div class="buttons5">
+          <button @click="Allrandom" class="button">רשימה רנדומלית</button>
+          <button @click="FairRandom" class="button">רנדומליות הוגנת</button>
+          <button @click="NoChange" class="button">אותו הסדר</button>
+          <button @click="KeepForward" class="button">
+            אותו הסדר, אחד קדימה
+          </button>
         </div>
       </div>
-      <div class="members">
-        <div v-for="member in members" :key="member.id">
-          {{ member.name }}
+      <div v-if="edi">
+        <button @click="Save" class="back">חזור</button>
+        <button @click="Add" v-if="edi" class="edit">הוסף</button><br />
+        <div class="inp" v-for="member in members" :key="member.id">
+          <div v-show="member.id" class="result">{{ member.name }}</div>
+          <input
+            v-if="!member.id"
+            type="text"
+            class="names"
+            :class="{ error: !k }"
+            :value="member.name"
+          />
+          <less @less="less" :id="member.id"> </less>
+          <button
+            v-show="member.id"
+            class="EditName"
+            @click="EditName(member.id)"
+          >
+            ערוך שם
+          </button>
+          <button
+            v-show="!member.id"
+            class="SaveName"
+            @click="EditedName(member.id)"
+          >
+            שמור שם
+          </button>
         </div>
+        <div v-if="!k">אל תשאירו שדות ריקים</div>
       </div>
-      <div class="admatai">
-        <span><img src="/images\admatai.png" height="150px" class="ask"/></span>
-        <div class="timepart" :class="{ error: s || e }">
-          <input type="time" class="time" />
-          <input type="time" class="time" />
-        </div>
-        <br />
+      <div class="result" v-show="results">
+        <div>{{ system }}</div>
       </div>
-      <div class="buttons5">
-        <button @click="Allrandom" class="button5">רשימה רנדומלית</button>
-        <button @click="FairRandom" class="button5">רנדומליות הוגנת</button>
-        <button @click="NoChange" class="button5">אותו הסדר</button>
-        <button @click="KeepForward" class="button5">
-          אותו הסדר, אחד קדימה
-        </button>
-      </div>
-    </div>
-    <div v-if="edi">
-      <button @click="Save" class="button1">חזור</button>
-      <button @click="Add" v-if="edi" class="button2">הוסף</button><br />
-      <div class="inp" v-for="member in members" :key="member.id">
-        <div v-show="member.id" class="result">{{ member.name }}</div>
-        <input
-          v-if="!member.id"
-          type="text"
-          class="names"
-          :class="{ error: !k }"
-          :value="member.name"
-        />
-        <less @less="less" :id="member.id"> </less>
-        <button v-show="member.id" class="button4" @click="EditName(member.id)">
-          ערוך שם
-        </button>
-        <button
-          v-show="!member.id"
-          class="button4"
-          @click="EditedName(member.id)"
-        >
-          שמור שם
-        </button>
-      </div>
-      <div v-if="!k">אל תשאירו שדות ריקים</div>
-    </div>
-    <div class="result" v-show="results">
-      <div>{{ system }}</div>
     </div>
   </div>
 </template>
@@ -102,6 +142,12 @@ export default {
   data() {
     return {
       Groups: [],
+      username: false,
+      Susername: "",
+      Msign: "",
+      CheckUser: false,
+      aviable: true,
+      Mlogin: "",
       g: 0,
       run: 2,
       ex: true,
@@ -128,6 +174,9 @@ export default {
     const path = `http://localhost:5000/groups`;
     this.$http.get(path).then(res => {
       this.Groups = res.data.groups;
+      if(this.Goups){
+        this.username = true;
+      }
       this.teams = this.Groups;
       this.ex = false;
       if (this.Groups.length < 1) {
@@ -136,6 +185,82 @@ export default {
     });
   },
   methods: {
+    sign() {
+      let Susername = document.querySelector(".Susername").value;
+      let Semail = document.querySelector(".Semail").value;
+      let Spassword = document.querySelector(".Spassword").value;
+      console.log(Spassword);
+      console.log(Susername);
+      console.log(Semail);
+      const pay = {
+        email: Semail,
+        gmail: true
+      };
+      const payload = {
+        username: Susername,
+        password: Spassword,
+        email: Semail
+      };
+      console.log(payload);
+      this.CheckEmail(pay, payload);
+    },
+    SignIn(payload) {
+      const path = `http://localhost:5000/users`;
+      this.$http
+        .post(path, payload)
+        .then(res => {
+          console.log(payload);
+          this.username = true;
+          this.Groups = [];
+          this.teams = this.Groups;
+          this.ex = true;
+          console.log(res.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    CheckEmail(pay, payload) {
+      const path = `http://localhost:5000/check`;
+      this.$http
+        .post(path, pay)
+        .then(res => {
+          console.log(res.data.email);
+          if (res.data.email == true) {
+            this.SignIn(payload);
+          } else {
+            this.Msign = "יש כבר משתמש עם המייל הזה";
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    Check() {
+      let Susername = document.querySelector(".Susername").value;
+      this.CheckUser = false;
+      if (Susername.length > 5 && Susername.length < 13) {
+        this.CheckUser = true;
+        this.Susername = Susername;
+        const payload = {
+          username: Susername,
+          name: true
+        };
+        console.log(payload);
+        this.CheckUserName(payload);
+      }
+    },
+    CheckUserName(payload) {
+      const path = `http://localhost:5000/check`;
+      this.$http
+        .post(path, payload)
+        .then(res => {
+          this.aviable = res.data.name;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
     GetGroups() {
       const path = `http://localhost:5000/groups`;
       this.$http
@@ -143,6 +268,43 @@ export default {
         .then(res => {
           this.Groups = res.data.groups;
           console.log(this.Groups);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    login() {
+      let Lusername = document.querySelector(".Lusername");
+      let Lpassword = document.querySelector(".Lpassword");
+      const payload = {
+        username: Lusername.value,
+        password: Lpassword.value,
+        get: true
+      };
+      console.log(payload);
+      this.Log(payload);
+    },
+    Log(payload) {
+      const path = `http://localhost:5000/groups`;
+      this.$http
+        .post(path, payload)
+        .then(res => {
+          if (res.data.message == "not vaild useranme") {
+            this.Mlogin = "שם משתמש לא קיים במערכת";
+            console.log("hello")
+          } else if (res.data.message == "worng password") {
+            this.Mlogin = "שם משתמש או סיסמא לא נכונים";
+          } else {
+            console.log(res.data.message)
+            this.Mlogin = "";
+            this.username = true;
+            this.Groups = res.data.groups;
+            this.teams = this.Groups;
+            this.ex = false;
+            if (this.Groups.length < 1) {
+              this.ex = true;
+            }
+          }
         })
         .catch(error => {
           console.log(error);
@@ -843,5 +1005,39 @@ export default {
 }
 .username {
   direction: rtl;
+}
+.NewGroup {
+  background-color: #4caf50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 8px;
+  margin-left: 44%;
+  /*margin-right: 40%;*/
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+.back {
+  margin-left: 38%;
+}
+.edit {
+  margin-left: 3%;
+}
+DeleteGroup {
+  margin-left: 38%;
+}
+.button {
+  margin-left: 2.5px;
+  margin-right: 2.5px;
+}
+.EditName {
+}
+.SaveName {
+  margin-left: 45%;
+  margin-right: 40%;
 }
 </style>

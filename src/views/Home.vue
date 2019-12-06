@@ -13,12 +13,13 @@
     <div>
       <img src="/images\logowhite.png" width="30%" class="contentfp" />
       <router-link to="/existing"
-        ><button class="button1">קבוצה קיימת</button></router-link
+        ><button class="exist">קבוצה קיימת</button></router-link
       >
       <router-link to="/newgroup"
-        ><button class="button2">צור קבוצה</button></router-link
+        ><button class="new">צור קבוצה</button></router-link
       >
     </div>
+  </div>
 </template>
 
 <script>
@@ -26,3 +27,11 @@ export default {
   name: "Home"
 };
 </script>
+<style scoped>
+.exist {
+  margin-left: 38%;
+}
+.new {
+  margin-left: 3%;
+}
+</style>
