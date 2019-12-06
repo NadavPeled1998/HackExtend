@@ -23,6 +23,11 @@ CORS(app, resources={r'/*': {'origins': '*'}})
 # CODE START
 
 
+<<<<<<< HEAD
+=======
+# (GET) get a specific list of member inside a group, (POST) add new member to a specific group , 
+#(PUT) update a specific group and members detail , (DELETE) delete group
+>>>>>>> 2aa50a513852bf11e01fe8282a0501f4466d81e6
 
 # check if username or email is valid or not
 @app.route('/check', methods=['POST'])
