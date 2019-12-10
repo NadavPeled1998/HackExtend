@@ -1,99 +1,113 @@
 <template>
   <div class="home">
     <div class="topnav">
-      <router-link to="/">בית</router-link>
+      <router-link :to="{ name: 'home', query: { id: this.id } }"
+        >בית</router-link
+      >
       <router-link to="/newgroup" class="active"> צור קבוצה</router-link>
-      <router-link to="/existing">קבוצות קיימות</router-link>
-      <router-link to="/contact">צור קשר</router-link>
-      <router-link to="/about">מי אנחנו</router-link>
+      <router-link :to="{ name: 'existing', query: { id: this.id } }"
+        >קבוצות קיימות</router-link
+      >
+      <router-link :to="{ name: 'contact', query: { id: this.id } }"
+        >צור קשר</router-link
+      >
+      <router-link :to="{ name: 'about', query: { id: this.id } }"
+        >מי אנחנו</router-link
+      >
       <router-link to="/" class="logo"
         ><img src="/images\logosh.png" height="18px"
       /></router-link>
     </div>
-    <div v-if="Next">
-      <div class="kamahav">
-        <img src="/images\kama.png" height="100px" class="ask" />
-        <el-input-number
-          v-model="num"
-          class="input"
-          @change="numbers"
-          :min="2"
-          :max="100"
-        ></el-input-number>
-      </div>
+    <div class="kamahav" v-if="Next">
+      <p>כמה חברים יש בקבוצה?</p>
+      <el-input-number
+        v-model="num"
+        class="input"
+        @change="numbers"
+        :min="2"
+        :max="100"
+      ></el-input-number>
     </div>
-    <div v-if="Next" class="mahash">
-      <img src="/images\ma.png" height="100px" class="ask" />
-      <div class="names" v-show="Next" :class="{ error: k }"></div>
-    </div>
-    <div v-show="Next">
-      <div class="admatai">
-        <span><img src="/images\admatai.png" height="150px" class="ask"/></span>
-        <div class="timepart" :class="{ error: s || e }">
+    <div class="admatai" v-show="Next">
+      <p>מתי מתחילה השמירה? ועד מתייי?</p>
+
+      <div class="timepart" :class="{ error: s || e }">
+        <div class="hatchala">
           <input type="time" class="time" />
-          <input type="time" class="time" />
+          סיום
         </div>
-        <br />
+        <div class="hatchala">
+          <input type="time" class="time" />
+          התחלה
+        </div>
       </div>
+    </div>
+    <div class="buttons" v-if="Next">
       <button @click="Allrandom" class="button">רשימה רנדומלית</button>
       <button @click="noChange" class="button">רשימה לפי הסדר</button>
+    </div>
+    <div v-if="Next" class="Ma">
+      <p class="ma">מה השמות שלכם?</p>
+      <div class="names" v-show="Next" :class="{ error: k }"></div>
     </div>
     <div v-show="results">
       <div class="result"></div>
       <div v-if="username">
-      <button @click="save" v-if="!saved" class="save">
-        שמור בשם
-      </button>
-      <button v-if="saved" class="saved">נשמר</button>
-      <router-link to="/" v-if="!saved" class="DontSave">אל תשמור</router-link>
-    </div>
-    <div v-if="!username">
-     <p>
-        בשביל לשמור את הקבוצה ולהשתמש בה שוב ושוב יש
-        <button
-          @click="
-            Sign = true;
-            log = false;
-          "
-        >
-          להירשם לאתר
+        <button @click="save" v-if="!saved" class="save">
+          שמור בשם
         </button>
-        או
-        <button
-          @click="
-            log = true;
-            Sign = false;
-          "
+        <button v-if="saved" class="saved">נשמר</button>
+        <router-link to="/" v-if="!saved" class="DontSave"
+          >אל תשמור</router-link
         >
-          להתחבר למשתמש קיים
-        </button>
-      </p>
-    <div class="sign signin" v-if="Sign">
-        <p>הרשם לאתר:</p>
-        <label>שם משתמש:</label>
-        <input type="text" @input="Check" class="Susername" />
-        <div v-if="CheckUser">
-          שם המשתמש {{ Susername }} <span v-if="aviable">זמין</span
-          ><span v-if="!aviable">לא זמין</span>
+      </div>
+      <div v-if="!username">
+        <p>
+          בשביל לשמור את הקבוצה ולהשתמש בה שוב ושוב יש
+          <button
+            @click="
+              Sign = true;
+              log = false;
+            "
+          >
+            להירשם לאתר
+          </button>
+          או
+          <button
+            @click="
+              log = true;
+              Sign = false;
+            "
+          >
+            להתחבר למשתמש קיים
+          </button>
+        </p>
+        <div class="sign signin" v-if="Sign">
+          <p>הרשם לאתר:</p>
+          <label>שם משתמש:</label>
+          <input type="text" @input="Check" class="Susername" />
+          <div v-if="CheckUser">
+            שם המשתמש {{ Susername }} <span v-if="aviable">זמין</span
+            ><span v-if="!aviable">לא זמין</span>
+          </div>
+          <label>דוא"ל:</label>
+          <input type="email" class="Semail" />
+          <label>סיסמא:</label>
+          <input type="password" class="Spassword" />
+          <div>{{ Msign }}</div>
+          <button @click="sign">הירשם</button>
         </div>
-        <label>דוא"ל:</label>
-        <input type="email" class="Semail" />
-        <label>סיסמא:</label>
-        <input type="password" class="Spassword" />
-        <div>{{ Msign }}</div>
-        <button @click="sign">הירשם</button>
+        <div class="sign login" v-if="log">
+          <p>יש לך כבר משתמש קיים?</p>
+          <label>שם משתמש:</label>
+          <input type="text" class="Lusername" />
+          <label>סיסמא:</label>
+          <input type="password" class="Lpassword" />
+          <div>{{ Mlogin }}</div>
+          <button @click="login">התחבר</button>
+          <p class="forgot">שכחת את הסיסמא?</p>
+        </div>
       </div>
-      <div class="sign login" v-if="log">
-        <p>יש לך כבר משתמש קיים?</p>
-        <label>שם משתמש:</label>
-        <input type="text" class="Lusername" />
-        <label>סיסמא:</label>
-        <input type="password" class="Lpassword" />
-        <div>{{ Mlogin }}</div>
-        <button @click="login">התחבר</button>
-        <p class="forgot">שכחת את הסיסמא?</p>
-      </div>
-    </div>
     </div>
   </div>
 </template>
@@ -117,6 +131,7 @@ export default {
       log: false,
       Sign: false,
       Next: true,
+      id: 0,
       val: 2,
       oval: 2,
       saved: false,
@@ -131,16 +146,24 @@ export default {
       s: false,
       e: false,
       group: "",
-      id: "",
       run: 1,
-      names: [], 
+      names: [],
       username: false,
       Susername: "",
       aviable: "",
-      CheckUser: false,
+      CheckUser: false
     };
   },
+  created() {
+    this.id = this.$route.query.id;
+  },
   mounted() {
+    console.log(this.id);
+    if (this.id !== 0) {
+      this.username = true;
+      console.log(this.username);
+    }
+    console.log(this.id);
     let names = document.querySelector(".names");
     for (let i = 0; i < 2; i++) {
       let div = document.createElement("DIV");
@@ -153,21 +176,28 @@ export default {
   },
   methods: {
     numbers() {
-      //let input = document.querySelector(".input");
-      if (this.num > 1) {
-        this.k = false;
-        let names = document.querySelector(".names");
-        console.log(names);
-        //let inputs = document.querySelectorAll(".name");
-        if (this.oval > 1) {
-          for (let i = 0; i < this.oval; i++) {
+      let input = document.querySelectorAll(".name");
+      if (input.length > this.num) {
+        console.log("hello");
+        //let inp = input.length
+        for (let i = 0; i < this.oval; i++) {
+          let inputs = document.querySelectorAll(".name");
+          if (inputs.length > this.num) {
             let names = document.querySelector(".names");
-            let input = document.querySelector(".name");
-            names.removeChild(input);
+            input = document.querySelectorAll(".name");
+            names.removeChild(input[input.length - 1]);
+          } else {
+            console.log(input.length);
+            console.log("shit");
+            break;
           }
         }
-        this.oval = this.num;
-        for (let i = 0; i < this.num; i++) {
+      } else {
+        console.log("hey");
+        let num = this.num - input.length;
+        console.log("num " + num);
+        for (let i = 0; i < num; i++) {
+          let names = document.querySelector(".names");
           let div = document.createElement("DIV");
           let x = document.createElement("INPUT");
           x.className = "name";
@@ -175,34 +205,13 @@ export default {
           names.appendChild(div);
           names.appendChild(x);
         }
-      } else {
-        this.negative = true;
-      }
-    },
-    add() {
-      let names = document.querySelector(".names");
-      let div = document.createElement("DIV");
-      let x = document.createElement("INPUT");
-      x.className = "name";
-      x.setAttribute("type", "text");
-      names.appendChild(div);
-      names.appendChild(x);
-    },
-    less() {
-      let inputs = document.querySelectorAll(".name");
-      if (inputs.length > 2) {
-        let names = document.querySelector(".names");
-        let input = document.querySelector(".name");
-        names.removeChild(input);
+        this.oval = this.num;
       }
     },
     sign() {
       let Susername = document.querySelector(".Susername").value;
       let Semail = document.querySelector(".Semail").value;
       let Spassword = document.querySelector(".Spassword").value;
-      console.log(Spassword);
-      console.log(Susername);
-      console.log(Semail);
       const pay = {
         email: Semail,
         gmail: true
@@ -212,7 +221,6 @@ export default {
         password: Spassword,
         email: Semail
       };
-      console.log(payload);
       this.CheckEmail(pay, payload);
     },
     SignIn(payload) {
@@ -220,12 +228,17 @@ export default {
       this.$http
         .post(path, payload)
         .then(res => {
+          console.log("payload");
           console.log(payload);
+          console.log("res");
+          console.log(res.data);
+          this.id = res.data.message;
+          console.log("id");
+          console.log(this.id);
           this.username = true;
           this.Groups = [];
           this.teams = this.Groups;
           this.ex = true;
-          console.log(res.data);
         })
         .catch(error => {
           console.log(error);
@@ -236,7 +249,6 @@ export default {
       this.$http
         .post(path, pay)
         .then(res => {
-          console.log(res.data.email);
           if (res.data.email == true) {
             this.SignIn(payload);
           } else {
@@ -290,7 +302,7 @@ export default {
         .then(res => {
           if (res.data.message == "not vaild useranme") {
             this.Mlogin = "שם משתמש לא קיים במערכת";
-            console.log("hello")
+            console.log("hello");
           } else if (res.data.message == "worng password") {
             this.Mlogin = "שם משתמש או סיסמא לא נכונים";
           } else {
@@ -315,8 +327,8 @@ export default {
       console.log(this.k);
       if (!this.k) {
         const Time = document.querySelectorAll(".time");
-        this.start = Time[0].value;
-        this.end = Time[1].value;
+        this.start = Time[1].value;
+        this.end = Time[0].value;
         console.log(this.start);
         console.log(this.end);
         if (this.start.length < 4) {
@@ -553,17 +565,15 @@ export default {
         this.fl.push(this.arr[i].fl);
         this.index.push(this.arr[i].index);
       }
-      console.log("arr");
-      console.log(this.arr);
       const payload = {
         title: this.Group.title,
         run: this.Group.run,
         name: this.name,
         fl: this.fl,
-        index: this.index
+        index: this.index,
+        add: true,
+        id: this.id
       };
-      console.log("payload");
-      console.log(payload);
       this.AddGroups(payload);
       this.saved = true;
     }
@@ -571,9 +581,47 @@ export default {
 };
 </script>
 <style scoped>
+p {
+  direction: rtl;
+  color: white;
+  font-size: 75px;
+}
+.kamahav {
+  display: block;
+  margin-right: 10%;
+  margin-top: 1%;
+  margin-left: 30%;
+}
+.Ma {
+  margin-top: 0%;
+}
+.ma {
+  margin-top: 8%;
+  margin-right: 65%;
+}
+.input {
+  margin-right: 70%;
+}
+.admatai {
+  direstion: rtl;
+  display: inline-block;
+  margin-right: 15%;
+  margin-top: 10%;
+  padding-left: 17%;
+}
 .button {
-  margin-left: 3%;
-  margin-top: 7%;
+  margin-right: 10px;
+  padding: 20px;
+  font-size:20px;
+}
+.buttons {
+  display: block;
+  /*padding-left:300px;
+  padding-right: 300px;*/
+  direction: rtl;
+  float: right;
+  margin-right: 48%;
+  margin-top: 3%;
 }
 .save {
   margin-left: 38%;

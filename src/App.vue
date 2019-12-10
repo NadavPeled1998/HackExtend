@@ -5,7 +5,9 @@
 </template>
 <script></script>
 <style>
-@import url("https://fonts.googleapis.com/css?family=Dosis:400,700,800");
+/*@import url("https://fonts.googleapis.com/css?family=Dosis:400,700,800");*/
+@import url("https://fonts.googleapis.com/css?family=Amatic+SC|Varela+Round&display=swap:400,700,800");
+
 body {
   margin: 0 !important;
   padding: 0 !important;
@@ -14,14 +16,16 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   height: 100%;
-  font-family: "asimon", "Dosis", sans-serif;
+  font-family: "Amatic SC", cursive;
   font-weight: 400;
+  line-height: 15px;
   font-size: 3em;
 }
 /* Add a black background color to the top navigation */
 .topnav {
   background-color: #f9fcf0;
   overflow: hidden;
+  font-family: "Varela Round", sans-serif;
 }
 
 /* Style the links inside the navigation bar */
@@ -44,12 +48,14 @@ body {
 .topnav a:hover {
   background-color: #ddd;
   color: black;
+  padding-bottom: 19.5px;
 }
 
 /* Add a color to the active/current link */
 .topnav a.active {
   background-color: #4caf50;
   color: white;
+  padding-bottom: 19.5px;
 }
 .contentfp {
   display: block;
@@ -75,6 +81,7 @@ button {
   font-size: 16px;
   border-radius: 8px;
   padding: 15px 32px;
+  /*font-family: 'Varela Round', sans-serif;
 
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
@@ -101,7 +108,9 @@ button:hover {
   display: inline-block;
   font-size: 16px;
   border-radius: 8px;
-  margin-left: 3%;
+  margin-left: 5%;
+  margin-bottom: 2%;
+  margin-right:-1%;
   /*margin-right:50%;*/
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
@@ -125,13 +134,13 @@ button:hover {
   background-color: #e3e3e3; /* Green */
   border: none;
   color: black;
-  padding: 10px 10px;
+  padding: 10px 18px 10px 0px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
   border-radius: 8px;
-  margin-left: 3%;
+  margin-left: 10%;
   /*margin-right:50%;*/
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
@@ -140,7 +149,7 @@ button:hover {
   background-color: #ffff; /* Green */
   border: none;
   color: #193001;
-  padding: 15px 40px;
+  padding: 15px 0px 15px 40px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -151,6 +160,18 @@ button:hover {
   /*margin-right:50%;*/
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
+}
+.hatchala {
+  font-family: "Varela Round", sans-serif;
+  margin-left: 20px;
+  display: inline-block;
+  background-color: white;
+  border-radius: 8px;
+  color: black;
+  padding-right: 40px;
+}
+.img {
+  display: block;
 }
 .kamahav {
   float: right;
@@ -193,37 +214,44 @@ button:hover {
   display: inline-block;
   text-align: center;
   background-color: white;
+  border-radius: 20px;
+  margin-right: 35%;
+  font-size:60px;
 }
 .sign p {
-  margin-bottom: 0%;
+  margin-bottom: 40%;
+  display:block;
 }
 .sign label {
-  font-size: 16px;
+  font-size:40px;
+  display:block;
 }
 .sign input {
-  margin-right: 35%;
+  font-size:20px;
+  margin-right: 20%;
+  margin-top: 20%;
+  margin-bottom:10%;
   display: block;
 }
 .sign .forgot {
-  margin-top: 5%;
-  margin-left: 1%;
-  text-align: left;
+  float:right;
+  margin-left:20%;
   margin-bottom: 1%;
   font-size: 13px;
+  font-family: "Varela Round", sans-serif;
+}
+.sign button{
+  margin-right: 65%;
 }
 .signin {
-  margin-left: 10%;
-  margin-right: 10%;
-  padding-bottom: 2.5%;
-  padding-right: 5%;
+ padding-bottom: 2.5%;
+ padding-right: 5%;
   padding-left: 7.5%;
-  margin-bottom: 7.5%;
 }
-login {
-  margin-left: 10%;
-  margin-right: 10%;
-  padding-bottom: 50%;
+.login {
+  margin-top: 2%;
+  padding-bottom: 2%;
   padding-right: 5%;
-  padding-left: 7.5%;
+  padding-left: 10%;
 }
 </style>

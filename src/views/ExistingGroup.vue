@@ -1,24 +1,32 @@
 <template>
   <div>
     <div class="topnav">
-      <router-link to="/">בית</router-link>
-      <router-link to="/newgroup"> צור קבוצה</router-link>
+      <router-link :to="{ name: 'home', query: { id: this.id } }"
+        >בית</router-link
+      >
+      <router-link :to="{ name: 'newgroup', query: { id: this.id } }">
+        צור קבוצה</router-link
+      >
       <router-link to="/existing" class="active">קבוצות קיימות</router-link>
-      <router-link to="/contact">צור קשר</router-link>
-      <router-link to="/about">מי אנחנו</router-link>
-      <router-link to="/" class="logo"
+      <router-link :to="{ name: 'contact', query: { id: this.id } }"
+        >צור קשר</router-link
+      >
+      <router-link :to="{ name: 'about', query: { id: this.id } }"
+        >מי אנחנו</router-link
+      >
+      <router-link :to="{ name: 'home', query: { id: this.id } }" class="logo"
         ><img src="/images\logosh.png" height="18px"
       /></router-link>
     </div>
     <div v-if="!username" class="username">
-      <p>
-        בשביל להשתמש באותן קבוצות שוב ושוב יש להתחבר למשתמש קיים או ליצור חדש.
+      <p class="disconnect">
+        בשביל להשתמש בקבוצות קיימות יש להתחבר למשתמש קיים או ליצור חדש.
       </p>
-      <div class="sign signin">
+      <div class="sign signin" v-if="Sign">
         <p>הרשם לאתר:</p>
         <label>שם משתמש:</label>
         <input type="text" @input="Check" class="Susername" />
-        <div v-if="CheckUser">
+        <div v-if="CheckUser" class="comment">
           שם המשתמש {{ Susername }} <span v-if="aviable">זמין</span
           ><span v-if="!aviable">לא זמין</span>
         </div>
@@ -28,16 +36,29 @@
         <input type="password" class="Spassword" />
         <div>{{ Msign }}</div>
         <button @click="sign">הירשם</button>
+        <p
+          class="forgot"
+          @click="
+            Sign = false;
+            Login = true;
+          "
+        >
+          יש לך כבר משתמש?
+        </p>
       </div>
-      <div class="sign login">
-        <p>יש לך כבר משתמש קיים?</p>
+      <div class="sign login" v-if="Login">
+        <p>התחבר</p>
         <label>שם משתמש:</label>
         <input type="text" class="Lusername" />
         <label>סיסמא:</label>
         <input type="password" class="Lpassword" />
         <div>{{ Mlogin }}</div>
         <button @click="login">התחבר</button>
-        <p class="forgot">שכחת את הסיסמא?</p>
+
+        <p class="forgot">
+          <span class="user">צור משתמש חדש </span>
+          <span class="pass">שכחתי את הסיסמא </span>
+        </p>
       </div>
     </div>
     <div v-if="username">
@@ -52,7 +73,7 @@
             v-for="team in teams"
             :key="team.id"
             :id="team.id"
-            :group="team.group"
+            :group="team.title"
           >
           </steam>
         </div>
@@ -141,7 +162,10 @@ export default {
   },
   data() {
     return {
+      Sign: true,
+      Login: false,
       Groups: [],
+      id: 0,
       username: false,
       Susername: "",
       Msign: "",
@@ -170,11 +194,18 @@ export default {
       system: ""
     };
   },
+  created() {
+    this.id = this.$route.query.id;
+  },
   mounted() {
-    const path = `http://localhost:5000/groups`;
+    console.log(this.id);
+    if (this.id) {
+      this.username = true;
+    }
+    const path = `http://localhost:5000/groups/{this.id}`;
     this.$http.get(path).then(res => {
       this.Groups = res.data.groups;
-      if(this.Goups){
+      if (this.Groups) {
         this.username = true;
       }
       this.teams = this.Groups;
@@ -262,7 +293,7 @@ export default {
         });
     },
     GetGroups() {
-      const path = `http://localhost:5000/groups`;
+      const path = `http://localhost:5000/groups/{this.id}`;
       this.$http
         .get(path)
         .then(res => {
@@ -291,15 +322,17 @@ export default {
         .then(res => {
           if (res.data.message == "not vaild useranme") {
             this.Mlogin = "שם משתמש לא קיים במערכת";
-            console.log("hello")
+            console.log("hello");
           } else if (res.data.message == "worng password") {
             this.Mlogin = "שם משתמש או סיסמא לא נכונים";
           } else {
-            console.log(res.data.message)
+            console.log(res);
             this.Mlogin = "";
             this.username = true;
             this.Groups = res.data.groups;
             this.teams = this.Groups;
+            this.id = res.data.userInfo;
+            console.log(this.id);
             this.ex = false;
             if (this.Groups.length < 1) {
               this.ex = true;
@@ -1017,6 +1050,7 @@ export default {
   font-size: 16px;
   border-radius: 8px;
   margin-left: 44%;
+  font-family: "Varela Round", sans-serif;
   /*margin-right: 40%;*/
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
@@ -1039,5 +1073,18 @@ DeleteGroup {
 .SaveName {
   margin-left: 45%;
   margin-right: 40%;
+}
+.user {
+  margin-right: -12%;
+  float: right;
+}
+.pass {
+  margin-left: -30%;
+  float: left;
+}
+.disconnect{
+  text-align: center;
+  color:white;
+  font-size:80px;
 }
 </style>

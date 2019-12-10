@@ -2,10 +2,18 @@
   <div class="First">
     <div class="topnav">
       <router-link to="/" class="active">בית</router-link>
-      <router-link to="/newgroup"> צור קבוצה</router-link>
-      <router-link to="/existing">קבוצות קיימות</router-link>
-      <router-link to="/contact">צור קשר</router-link>
-      <router-link to="/about">מי אנחנו</router-link>
+      <router-link :to="{ name: 'newgroup', query: { id: this.id } }">
+        צור קבוצה</router-link
+      >
+      <router-link :to="{ name: 'existing', query: { id: this.id } }"
+        >קבוצות קיימות</router-link
+      >
+      <router-link :to="{ name: 'contact', query: { id: this.id } }"
+        >צור קשר</router-link
+      >
+      <router-link :to="{ name: 'about', query: { id: this.id } }"
+        >מי אנחנו</router-link
+      >
       <router-link to="/" class="logo"
         ><img src="/images\logosh.png" height="18px"
       /></router-link>
@@ -24,7 +32,15 @@
 
 <script>
 export default {
-  name: "Home"
+  name: "Home",
+  data() {
+    return {
+      id: 0
+    };
+  },
+  created() {
+    this.id = this.$route.query.id;
+  }
 };
 </script>
 <style scoped>
