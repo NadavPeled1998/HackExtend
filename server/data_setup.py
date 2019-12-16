@@ -7,13 +7,14 @@ from sqlalchemy import create_engine
 
 
 Base = declarative_base()
-
+optsion = ['True', 'False']
 class User(Base):
     __tablename__ = 'user'
     username = Column(String(25), primary_key=True)
     password = Column(String(100), nullable=False)
     email = Column(String(250), primary_key=True)
     id = Column(Integer(), nullable=False)
+    login = Column(String(7), default='True', nullable=False)
 
     @property
     def serialize(self):
@@ -22,7 +23,8 @@ class User(Base):
             'username': self.username,
             'password': self.password,
             'id': self.id,
-            'email': self.email
+            'email': self.email,
+            'login': self.login
         }
 
 
