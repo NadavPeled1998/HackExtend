@@ -48,7 +48,7 @@ body {
 
 /* Change the color of links on hover */
 .topnav a:hover {
- /* padding-bottom:19.5px;*/
+  /* padding-bottom:19.5px;*/
   background-color: #ddd;
   color: black;
   padding-bottom: 19.5px;
@@ -78,7 +78,7 @@ body {
 .topnav .signLink {
   float: left;
   display: inline-block;
- margin-left:3.5%;
+  margin-left: 3.5%;
   cursor: pointer;
 }
 .contentfp {
@@ -243,7 +243,7 @@ button:hover {
 .sign {
   display: inline-block;
   text-align: center;
-  background-color: #f9fcf0 ;/*;rgba(255,255,255,0.75);*/
+  background-color: #f9fcf0; /*;rgba(255,255,255,0.75);*/
   border-radius: 20px;
   margin-right: 35%;
   margin-bottom: 1.5%;
@@ -261,7 +261,7 @@ button:hover {
 }
 .sign input {
   font-size: 20px;
-  margin-right: 20%;/*
+  margin-right: 20%; /*
   background-color: #ffff;*/
   display: block;
 }
@@ -319,9 +319,9 @@ button:hover {
   font-size: 15px;
   font-family: "Varela Round", sans-serif;
 }
-.Mlogin{
-  color:red;
-  font-size:15px;
+.Mlogin {
+  color: red;
+  font-size: 15px;
   font-family: "Varela Round", sans-serif;
 }
 </style>

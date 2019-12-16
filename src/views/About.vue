@@ -15,13 +15,19 @@
       >
       <router-link to="/about" class="active">מי אנחנו</router-link>
       <span v-if="username" @click="logout">התנתק</span>
-       <router-link v-if="falseuser" :to="{ name: 'home', query: { id: this.id } }" class="logo"
+      <router-link
+        v-if="falseuser"
+        :to="{ name: 'home', query: { id: this.id } }"
+        class="logo"
         ><img src="/images\logosh.png" height="18px"
       /></router-link>
       <router-link class="signLink" v-if="falseuser" to="/sign">
         הרשם/התחבר</router-link
       >
-      <router-link v-if="username" :to="{ name: 'home', query: { id: this.id } }" class="logo"
+      <router-link
+        v-if="username"
+        :to="{ name: 'home', query: { id: this.id } }"
+        class="logo"
         ><img src="/images\logosh.png" height="18px"
       /></router-link>
     </div>
@@ -70,18 +76,15 @@ export default {
       .then(res => {
         if (res.data.login == "True") {
           this.username = true;
-          this.falseuser= false;
-          console.log(this.username);
-          console.log(res.data);
+          this.falseuser = false;
         } else {
           this.username = false;
-          this.falseuser= true;
-          console.log(res.data);
+          this.falseuser = true;
         }
       })
       .catch(error => {
         this.username = false;
-         this.falseuser= true;
+        this.falseuser = true;
         console.log(error);
       });
   },
@@ -97,7 +100,7 @@ export default {
       this.$http.post(path, payload).then(() => {
         this.id = 0;
         this.username = false;
-         this.falseuser= true;
+        this.falseuser = true;
       });
     }
   }

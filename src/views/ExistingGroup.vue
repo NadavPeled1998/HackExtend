@@ -14,14 +14,20 @@
       <router-link :to="{ name: 'about', query: { id: this.id } }"
         >מי אנחנו</router-link
       >
-     <span v-if="username" @click="logout">התנתק</span>
-       <router-link v-if="falseuser" :to="{ name: 'home', query: { id: this.id } }" class="logo"
+      <span v-if="username" @click="logout">התנתק</span>
+      <router-link
+        v-if="falseuser"
+        :to="{ name: 'home', query: { id: this.id } }"
+        class="logo"
         ><img src="/images\logosh.png" height="18px"
       /></router-link>
       <router-link class="signLink" v-if="falseuser" to="/sign">
         הרשם/התחבר</router-link
       >
-      <router-link v-if="username" :to="{ name: 'home', query: { id: this.id } }" class="logo"
+      <router-link
+        v-if="username"
+        :to="{ name: 'home', query: { id: this.id } }"
+        class="logo"
         ><img src="/images\logosh.png" height="18px"
       /></router-link>
     </div>
@@ -77,11 +83,11 @@
       <div v-if="!n">
         <div v-if="ex" class="loya">
           <p>אין קבוצות קיימות למשתמש זה</p>
-         <router-link
-          :to="{ name: 'newgroup', query: { id: this.id } }"
-          class="FNewGroup"
-          >צור קבוצה חדשה</router-link
-        >
+          <router-link
+            :to="{ name: 'newgroup', query: { id: this.id } }"
+            class="FNewGroup"
+            >צור קבוצה חדשה</router-link
+          >
         </div>
         <div v-if="!ex">
           <div class="container">
@@ -98,7 +104,8 @@
         </div>
         <router-link
           :to="{ name: 'newgroup', query: { id: this.id } }"
-          class="NewGroup" v-if="!ex"
+          class="NewGroup"
+          v-if="!ex"
           >צור קבוצה חדשה</router-link
         >
       </div>
@@ -238,12 +245,10 @@ export default {
         if (res.data.login == "True") {
           this.username = true;
           this.falseuser = false;
-          console.log(res.data);
           this.GetGroups(this.id);
         } else {
           this.falseuser = true;
           this.username = false;
-          console.log(res.data);
         }
       })
       .catch(error => {
@@ -289,15 +294,13 @@ export default {
       this.$http
         .post(path, payload)
         .then(res => {
-          console.log(payload);
-          console.log(res);
           this.username = true;
-          this.falseuser= false;
-          this.id = res.data.userInfo
+          this.falseuser = false;
+          this.id = res.data.userInfo;
           this.Groups = [];
           this.teams = [];
 
-          this.ex= true;
+          this.ex = true;
         })
         .catch(error => {
           console.log(error);
@@ -308,7 +311,6 @@ export default {
       this.$http
         .post(path, pay)
         .then(res => {
-          console.log(res.data.email);
           if (res.data.email == true) {
             this.SignIn(payload);
           } else {
@@ -350,16 +352,11 @@ export default {
         .get(path)
         .then(res => {
           this.Groups = res.data.groups;
-          console.log(res.data)
-          console.log(this.Groups)
           this.teams = this.Groups;
-          console.log(this.Groups);
           this.ex = true;
           if (this.Groups.length > 0) {
             this.ex = false;
-            console.log(this.ex)
           }
-          console.log(this.ex)
         })
         .catch(error => {
           console.log(error);
@@ -384,16 +381,13 @@ export default {
           console.log(res.data);
           if (res.data.message == "not vaild username") {
             this.Mlogin = "שם משתמש לא קיים במערכת";
-            console.log("hello");
           } else if (res.data.message == "wrong password") {
             this.Mlogin = "שם משתמש או סיסמא לא נכונים";
           } else {
-            console.log(res);
             this.Mlogin = "";
             this.username = true;
             this.falseuser = false;
             this.id = res.data.userInfo;
-            console.log(this.id);
             this.GetGroups(this.id);
           }
         })
@@ -405,16 +399,13 @@ export default {
       const path = `http://localhost:5000/group/${id}`;
       this.$http.get(path).then(res => {
         this.members = res.data.Member;
-        console.log(res.data);
       });
     },
     showTeam(id) {
-      //const team = this.teams.find(team => team.id == id);
       this.g = id;
       for (let i = 0; i < this.Groups.length; i++) {
         if (this.g === this.Groups[i].id) {
           this.run = this.Groups[i].run;
-          console.log(this.run);
         }
       }
       this.n = true;
@@ -430,9 +421,7 @@ export default {
     },
     EditName(id) {
       if (this.ed) {
-        //console.log(id);
         const member = this.members.find(member => member.id == id);
-        //console.log(member);
         for (let i = 0; i < 1; i++) {
           this.beid = member.id;
         }
@@ -450,7 +439,7 @@ export default {
           member.id = this.beid;
           member.name = input.value;
           const payload = {
-            name: member.name 
+            name: member.name
           };
           this.ed = true;
           this.UpdateName(payload, member.id);
@@ -498,7 +487,6 @@ export default {
         })
         .catch(error => {
           console.log(error);
-          this.GetGroups;
         });
     },
 
@@ -508,16 +496,14 @@ export default {
       for (let i = 0; i < this.members.length; i++) {
         if (this.members[i].id === id) {
           let sp = this.members.splice(i, 1);
-          console.log(sp);
+          console.log(sp)
         }
       }
       let inps = document.querySelectorAll(".inp");
-      console.log(inps);
       let inp;
-      console.log(inp);
+      console.log(inp)
       if (inps.length > 2) {
         if (this.l.length < 1) {
-          console.log("hello");
           for (let i = 0; i <= this.members.length; i++) {
             if (member.id == i) {
               inp = inps[i - 1];
@@ -546,7 +532,6 @@ export default {
         }
         this.l.push(member.id);
         this.DeleteName(member.id);
-        //inp.parentNode.removeChild(inp);
       }
     },
     DeleteName(id) {
@@ -682,15 +667,17 @@ export default {
             this.hour1[i] +
             ":" +
             this.minute1[i] +
-            " - " + this.start 
+            " - " +
+            this.start;
         } else if (i == this.arr.length - 1) {
           div.innerHTML =
             randomize[i].name +
             " " +
-            this.end +  " - " +
+            this.end +
+            " - " +
             this.hour1[i - 1] +
             ":" +
-            this.minute1[i - 1]
+            this.minute1[i - 1];
         } else {
           div.innerHTML =
             randomize[i].name +
@@ -764,15 +751,16 @@ export default {
               ":" +
               this.minute1[i] +
               " - " +
-              this.start 
+              this.start;
           } else if (i == this.arr.length - 1) {
             div.innerHTML =
               this.arr[i].name +
-              " " + 
-              this.end +  " - " +
+              " " +
+              this.end +
+              " - " +
               this.hour1[i - 1] +
               ":" +
-              this.minute1[i - 1]
+              this.minute1[i - 1];
           } else {
             div.innerHTML =
               this.arr[i].name +
@@ -781,9 +769,9 @@ export default {
               ":" +
               this.minute1[i] +
               " - " +
-              this.hour1[i-1] +
+              this.hour1[i - 1] +
               ":" +
-              this.minute1[i-1];
+              this.minute1[i - 1];
           }
         }
         let run = document.createElement("DIV");
@@ -833,44 +821,46 @@ export default {
         this.results = true;
         let result = document.querySelector(".result");
         for (let i = 0; i < this.arr.length; i++) {
-        if (this.hour1[i] < 10) {
-          this.hour1[i] = "0" + this.hour1[i];
+          if (this.hour1[i] < 10) {
+            this.hour1[i] = "0" + this.hour1[i];
+          }
+          if (this.minute1[i] < 10) {
+            this.minute1[i] = "0" + this.minute1[i];
+          }
+          let div = document.createElement("DIV");
+          div.className = "result1";
+          result.appendChild(div);
+          if (i == 0) {
+            div.innerHTML =
+              randomize[i].name +
+              " " +
+              this.hour1[i] +
+              ":" +
+              this.minute1[i] +
+              " - " +
+              this.start;
+          } else if (i == this.arr.length - 1) {
+            div.innerHTML =
+              randomize[i].name +
+              " " +
+              this.end +
+              " - " +
+              this.hour1[i - 1] +
+              ":" +
+              this.minute1[i - 1];
+          } else {
+            div.innerHTML =
+              randomize[i].name +
+              " " +
+              this.hour1[i] +
+              ":" +
+              this.minute1[i] +
+              " - " +
+              this.hour1[i - 1] +
+              ":" +
+              this.minute1[i - 1];
+          }
         }
-        if (this.minute1[i] < 10) {
-          this.minute1[i] = "0" + this.minute1[i];
-        }
-        let div = document.createElement("DIV");
-        div.className = "result1";
-        result.appendChild(div);
-        if (i == 0) {
-          div.innerHTML =
-            randomize[i].name +
-            " " +
-            this.hour1[i] +
-            ":" +
-            this.minute1[i] +
-            " - " + this.start 
-        } else if (i == this.arr.length - 1) {
-          div.innerHTML =
-            randomize[i].name +
-            " " +
-            this.end +  " - " +
-            this.hour1[i - 1] +
-            ":" +
-            this.minute1[i - 1]
-        } else {
-          div.innerHTML =
-            randomize[i].name +
-            " " +
-            this.hour1[i] +
-            ":" +
-            this.minute1[i] +
-            " - " +
-            this.hour1[i - 1] +
-            ":" +
-            this.minute1[i - 1];
-        }
-      }
         let run = document.createElement("DIV");
         this.run += 1;
         run.innerHTML = "סבב: " + this.run;
@@ -992,45 +982,47 @@ export default {
         }
         this.results = true;
         let result = document.querySelector(".result");
-       for (let i = 0; i < this.arr.length; i++) {
-        if (this.hour1[i] < 10) {
-          this.hour1[i] = "0" + this.hour1[i];
+        for (let i = 0; i < this.arr.length; i++) {
+          if (this.hour1[i] < 10) {
+            this.hour1[i] = "0" + this.hour1[i];
+          }
+          if (this.minute1[i] < 10) {
+            this.minute1[i] = "0" + this.minute1[i];
+          }
+          let div = document.createElement("DIV");
+          div.className = "result1";
+          result.appendChild(div);
+          if (i == 0) {
+            div.innerHTML =
+              randomize[i].name +
+              " " +
+              this.hour1[i] +
+              ":" +
+              this.minute1[i] +
+              " - " +
+              this.start;
+          } else if (i == this.arr.length - 1) {
+            div.innerHTML =
+              randomize[i].name +
+              " " +
+              this.end +
+              " - " +
+              this.hour1[i - 1] +
+              ":" +
+              this.minute1[i - 1];
+          } else {
+            div.innerHTML =
+              randomize[i].name +
+              " " +
+              this.hour1[i] +
+              ":" +
+              this.minute1[i] +
+              " - " +
+              this.hour1[i - 1] +
+              ":" +
+              this.minute1[i - 1];
+          }
         }
-        if (this.minute1[i] < 10) {
-          this.minute1[i] = "0" + this.minute1[i];
-        }
-        let div = document.createElement("DIV");
-        div.className = "result1";
-        result.appendChild(div);
-        if (i == 0) {
-          div.innerHTML =
-            randomize[i].name +
-            " " +
-            this.hour1[i] +
-            ":" +
-            this.minute1[i] +
-            " - " + this.start 
-        } else if (i == this.arr.length - 1) {
-          div.innerHTML =
-            randomize[i].name +
-            " " +
-            this.end +  " - " +
-            this.hour1[i - 1] +
-            ":" +
-            this.minute1[i - 1]
-        } else {
-          div.innerHTML =
-            randomize[i].name +
-            " " +
-            this.hour1[i] +
-            ":" +
-            this.minute1[i] +
-            " - " +
-            this.hour1[i - 1] +
-            ":" +
-            this.minute1[i - 1];
-        }
-      }
         let run = document.createElement("DIV");
         this.run += 1;
         run.innerHTML = "סבב: " + this.run;
@@ -1046,7 +1038,6 @@ export default {
         idid.sort(function(a, b) {
           return a - b;
         });
-        console.log(idid);
         let ind = [];
         for (let k = 0; k < randomize.length; k++)
           for (let i = 0; i < randomize.length; i++) {

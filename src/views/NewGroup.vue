@@ -15,13 +15,19 @@
         >מי אנחנו</router-link
       >
       <span v-if="username" @click="logout">התנתק</span>
-       <router-link v-if="falseuser" :to="{ name: 'home', query: { id: this.id } }" class="logo"
+      <router-link
+        v-if="falseuser"
+        :to="{ name: 'home', query: { id: this.id } }"
+        class="logo"
         ><img src="/images\logosh.png" height="18px"
       /></router-link>
       <router-link class="signLink" v-if="falseuser" to="/sign">
         הרשם/התחבר</router-link
       >
-      <router-link v-if="username" :to="{ name: 'home', query: { id: this.id } }" class="logo"
+      <router-link
+        v-if="username"
+        :to="{ name: 'home', query: { id: this.id } }"
+        class="logo"
         ><img src="/images\logosh.png" height="18px"
       /></router-link>
     </div>
@@ -73,7 +79,10 @@
           שמור בשם
         </button>
         <button v-if="saved" class="saved">נשמר</button>
-        <router-link :to="{ name: 'home', query: { id: this.id } }" v-if="!saved" class="DontSave"
+        <router-link
+          :to="{ name: 'home', query: { id: this.id } }"
+          v-if="!saved"
+          class="DontSave"
           >אל תשמור</router-link
         >
       </div>
@@ -165,7 +174,7 @@ export default {
       run: 1,
       names: [],
       username: false,
-      falseuser:false,
+      falseuser: false,
       Susername: "",
       aviable: "",
       CheckUser: false,
@@ -176,20 +185,16 @@ export default {
     this.id = this.$route.query.id;
   },
   mounted() {
-    console.log(this.id);
     const path = `http://localhost:5000/user/${this.id}`;
     this.$http.get(path).then(res => {
       if (res.data.login == "True") {
         this.username = true;
-        this.falseuser= false;
-        console.log(res.data);
+        this.falseuser = false;
       } else {
         this.username = false;
-        this.falseuser= true;
-        console.log(res.data);
+        this.falseuser = true;
       }
     });
-    console.log(this.id);
     let names = document.querySelector(".names");
     for (let i = 0; i < 2; i++) {
       let div = document.createElement("DIV");
@@ -204,8 +209,6 @@ export default {
     numbers() {
       let input = document.querySelectorAll(".name");
       if (input.length > this.num) {
-        console.log("hello");
-        //let inp = input.length
         for (let i = 0; i < this.oval; i++) {
           let inputs = document.querySelectorAll(".name");
           if (inputs.length > this.num) {
@@ -213,15 +216,11 @@ export default {
             input = document.querySelectorAll(".name");
             names.removeChild(input[input.length - 1]);
           } else {
-            console.log(input.length);
-            console.log("shit");
             break;
           }
         }
       } else {
-        console.log("hey");
         let num = this.num - input.length;
-        console.log("num " + num);
         for (let i = 0; i < num; i++) {
           let names = document.querySelector(".names");
           let div = document.createElement("DIV");
@@ -254,15 +253,9 @@ export default {
       this.$http
         .post(path, payload)
         .then(res => {
-          console.log("payload");
-          console.log(payload);
-          console.log("res");
-          console.log(res.data);
-          this.id = res.data.userInfo
-          console.log("id");
-          console.log(this.id);
+          this.id = res.data.userInfo;
           this.username = true;
-          this.falseuser= false;
+          this.falseuser = false;
           this.Groups = [];
           this.teams = this.Groups;
           this.ex = true;
@@ -296,7 +289,6 @@ export default {
           username: Susername,
           name: true
         };
-        console.log(payload);
         this.CheckUserName(payload);
       }
     },
@@ -319,7 +311,6 @@ export default {
         password: Lpassword.value,
         login: "True"
       };
-      console.log(payload);
       this.Log(payload);
     },
     Log(payload) {
@@ -327,19 +318,15 @@ export default {
       this.$http
         .post(path, payload)
         .then(res => {
-          console.log(res.data);
           if (res.data.message == "not vaild username") {
             this.Mlogin = "שם משתמש לא קיים במערכת";
-            console.log("hello");
           } else if (res.data.message == "wrong password") {
             this.Mlogin = "שם משתמש או סיסמא לא נכונים";
           } else {
-            console.log(res);
             this.Mlogin = "";
             this.username = true;
-            this.falseuser= false;
+            this.falseuser = false;
             this.id = res.data.userInfo;
-            console.log(this.id);
           }
         })
         .catch(error => {
@@ -356,13 +343,10 @@ export default {
           this.k = false;
         }
       }
-      console.log(this.k);
       if (!this.k) {
         const Time = document.querySelectorAll(".time");
         this.start = Time[1].value;
         this.end = Time[0].value;
-        console.log(this.start);
-        console.log(this.end);
         if (this.start.length < 4) {
           this.s = true;
         } else {
@@ -374,16 +358,12 @@ export default {
           this.e = false;
         }
         if (!this.s && !this.e) {
-          console.log(inputs.length);
           for (let i = 0; i < inputs.length; i++) {
             this.arr[i] = {};
             this.arr[i].name = inputs[i].value;
-            console.log(inputs[i].value);
             this.arr[i].fl = 0;
-            console.log(this.arr[i]);
             this.arr[i].index = 0;
           }
-          console.log(this.arr);
           this.Next = false;
           let Shour = Number(this.start.charAt(0) + this.start.charAt(1));
           let Sminute = Number(this.start.charAt(3) + this.start.charAt(4));
@@ -423,15 +403,11 @@ export default {
       }
     },
     random() {
-      console.log("random");
-      console.log(this.arr);
       let randomNumbers = [];
       for (let i = 0; i < this.arr.length; i++) {
         randomNumbers.unshift(this.arr[i].random);
       }
       randomNumbers.sort();
-      console.log(randomNumbers);
-      console.log(this.arr);
       let randomize = [];
       for (let k = 0; k < this.arr.length; k++) {
         for (let i = 0; i < this.arr.length; i++) {
@@ -465,15 +441,17 @@ export default {
             this.hour1[i] +
             ":" +
             this.minute1[i] +
-            " - " + this.start 
+            " - " +
+            this.start;
         } else if (i == this.arr.length - 1) {
           div.innerHTML =
             randomize[i].name +
             " " +
-            this.end +  " - " +
+            this.end +
+            " - " +
             this.hour1[i - 1] +
             ":" +
-            this.minute1[i - 1]
+            this.minute1[i - 1];
         } else {
           div.innerHTML =
             randomize[i].name +
@@ -493,7 +471,6 @@ export default {
       for (let i = 0; i < this.arr.length; i++) {
         this.arr[i].index = i;
       }
-      console.log(randomize);
       let run = document.createElement("DIV");
       run.innerHTML = "סבב: 1";
       result.appendChild(run);
@@ -516,7 +493,7 @@ export default {
         }
         this.results = true;
         let result = document.querySelector(".result");
-       for (let i = 0; i < this.arr.length; i++) {
+        for (let i = 0; i < this.arr.length; i++) {
           if (this.hour1[i] < 10) {
             this.hour1[i] = "0" + this.hour1[i];
           }
@@ -534,15 +511,16 @@ export default {
               ":" +
               this.minute1[i] +
               " - " +
-              this.start 
+              this.start;
           } else if (i == this.arr.length - 1) {
             div.innerHTML =
               this.arr[i].name +
-              " " + 
-              this.end +  " - " +
+              " " +
+              this.end +
+              " - " +
               this.hour1[i - 1] +
               ":" +
-              this.minute1[i - 1]
+              this.minute1[i - 1];
           } else {
             div.innerHTML =
               this.arr[i].name +
@@ -551,9 +529,9 @@ export default {
               ":" +
               this.minute1[i] +
               " - " +
-              this.hour1[i-1] +
+              this.hour1[i - 1] +
               ":" +
-              this.minute1[i-1];
+              this.minute1[i - 1];
           }
         }
         this.arr[0].fl = 1;
@@ -570,7 +548,6 @@ export default {
         .get(path)
         .then(res => {
           this.Groups = res.data.groups;
-          console.log(this.Groups);
         })
         .catch(e => {
           console.log(e);
@@ -620,7 +597,7 @@ export default {
       this.$http.post(path, payload).then(() => {
         this.id = 0;
         this.username = false;
-        this.falseuser= true;
+        this.falseuser = true;
       });
     }
   }
@@ -668,7 +645,7 @@ p {
   float: right;
   margin-right: 48%;
   margin-top: 3%;
-  margin-bottom:2%;
+  margin-bottom: 2%;
 }
 .save {
   margin-left: 41%;

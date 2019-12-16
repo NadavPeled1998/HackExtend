@@ -15,13 +15,19 @@
         >מי אנחנו</router-link
       >
       <span v-if="username" @click="logout">התנתק</span>
-       <router-link v-if="falseuser" :to="{ name: 'home', query: { id: this.id } }" class="logo"
+      <router-link
+        v-if="falseuser"
+        :to="{ name: 'home', query: { id: this.id } }"
+        class="logo"
         ><img src="/images\logosh.png" height="18px"
       /></router-link>
       <router-link class="signLink" v-if="falseuser" to="/sign">
         הרשם/התחבר</router-link
       >
-      <router-link v-if="username" :to="{ name: 'home', query: { id: this.id } }" class="logo"
+      <router-link
+        v-if="username"
+        :to="{ name: 'home', query: { id: this.id } }"
+        class="logo"
         ><img src="/images\logosh.png" height="18px"
       /></router-link>
     </div>
@@ -58,11 +64,9 @@ export default {
         if (res.data.login == "True") {
           this.username = true;
           this.falseuser = false;
-          console.log(res.data);
         } else {
           this.username = false;
           this.falseuser = true;
-          console.log(res.data);
         }
       })
       .catch(error => {

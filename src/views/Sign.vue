@@ -14,14 +14,20 @@
       <router-link :to="{ name: 'about', query: { id: this.id } }"
         >מי אנחנו</router-link
       >
-    <span v-if="username" @click="logout">התנתק</span>
-       <router-link v-if="!username" :to="{ name: 'home', query: { id: this.id } }" class="logo"
+      <span v-if="username" @click="logout">התנתק</span>
+      <router-link
+        v-if="!username"
+        :to="{ name: 'home', query: { id: this.id } }"
+        class="logo"
         ><img src="/images\logosh.png" height="18px"
       /></router-link>
       <router-link class="signLink" v-if="!username" to="/sign">
         הרשם/התחבר</router-link
       >
-      <router-link v-if="username" :to="{ name: 'home', query: { id: this.id } }" class="logo"
+      <router-link
+        v-if="username"
+        :to="{ name: 'home', query: { id: this.id } }"
+        class="logo"
         ><img src="/images\logosh.png" height="18px"
       /></router-link>
     </div>
@@ -92,12 +98,10 @@ export default {
       if (res.data.login == "True") {
         this.username = true;
         this.falseuser = false;
-        console.log(res.data);
         this.GetGroups(this.id);
       } else {
         this.username = false;
         this.falseuser = true;
-        console.log(res.data);
       }
     });
   },
@@ -115,7 +119,6 @@ export default {
         password: Spassword,
         email: Semail
       };
-      console.log(payload);
       this.CheckEmail(pay, payload);
     },
     SignIn(payload) {
@@ -123,8 +126,6 @@ export default {
       this.$http
         .post(path, payload)
         .then(res => {
-          console.log(payload);
-          console.log(res.data);
           this.id = res.data.userInfo;
           this.username = true;
           this.falseuser = false;
@@ -140,7 +141,6 @@ export default {
       this.$http
         .post(path, pay)
         .then(res => {
-          console.log(res.data.email);
           if (res.data.email == true) {
             this.SignIn(payload);
           } else {
@@ -156,14 +156,12 @@ export default {
       this.CheckUser = false;
       if (Susername.length > 5 && Susername.length < 13) {
         this.CheckUser = true;
-        console.log(this.CheckUser);
         this.Susername = Susername;
         this.user = Susername;
         const payload = {
           username: Susername,
           name: true
         };
-        console.log(payload);
         this.CheckUserName(payload);
       }
     },
@@ -173,7 +171,6 @@ export default {
         .post(path, payload)
         .then(res => {
           this.aviable = res.data.name;
-          console.log(this.aviable);
         })
         .catch(error => {
           console.log(error);
@@ -183,13 +180,11 @@ export default {
       let Lusername = document.querySelector(".Lusername");
       let Lpassword = document.querySelector(".Lpassword");
       this.user = Lusername.value;
-      console.log(this.user);
       const payload = {
         username: Lusername.value,
         password: Lpassword.value,
         login: "True"
       };
-      console.log(payload);
       this.Log(payload);
     },
     Log(payload) {
@@ -199,12 +194,10 @@ export default {
         .then(res => {
           console.log(res.data);
           if (res.data.message == "not vaild username") {
-            this.Mlogin = "שם משתמש לא קיים במערכת";
-            console.log("hello");
+            this.Mlogin = "שם משתמש לא קיים במערכת"
           } else if (res.data.message == "wrong password") {
             this.Mlogin = "שם משתמש או סיסמא לא נכונים";
           } else {
-            console.log(res);
             this.Mlogin = "";
             this.username = true;
             this.falseuser = false;
