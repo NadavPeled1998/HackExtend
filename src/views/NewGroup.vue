@@ -15,10 +15,10 @@
         >מי אנחנו</router-link
       >
       <span v-if="username" @click="logout">התנתק</span>
-       <router-link v-if="!username" :to="{ name: 'home', query: { id: this.id } }" class="logo"
+       <router-link v-if="falseuser" :to="{ name: 'home', query: { id: this.id } }" class="logo"
         ><img src="/images\logosh.png" height="18px"
       /></router-link>
-      <router-link class="signLink" v-if="!username" to="/sign">
+      <router-link class="signLink" v-if="falseuser" to="/sign">
         הרשם/התחבר</router-link
       >
       <router-link v-if="username" :to="{ name: 'home', query: { id: this.id } }" class="logo"
