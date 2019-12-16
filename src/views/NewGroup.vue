@@ -14,11 +14,25 @@
       <router-link :to="{ name: 'about', query: { id: this.id } }"
         >מי אנחנו</router-link
       >
-      <router-link to="/" class="logo"
+      <span v-if="username" @click="logout">התנתק</span>
+       <router-link v-if="!username" :to="{ name: 'home', query: { id: this.id } }" class="logo"
+        ><img src="/images\logosh.png" height="18px"
+      /></router-link>
+      <router-link class="signLink" v-if="!username" to="/sign">
+        הרשם/התחבר</router-link
+      >
+      <router-link v-if="username" :to="{ name: 'home', query: { id: this.id } }" class="logo"
         ><img src="/images\logosh.png" height="18px"
       /></router-link>
     </div>
     <div class="kamahav" v-if="Next">
+      <el-button
+        type="success"
+        icon="el-icon-check"
+        circle
+        class="circle"
+        v-if="saved"
+      ></el-button>
       <p>כמה חברים יש בקבוצה?</p>
       <el-input-number
         v-model="num"
@@ -51,18 +65,20 @@
       <div class="names" v-show="Next" :class="{ error: k }"></div>
     </div>
     <div v-show="results">
-      <div class="result"></div>
+      <div class="result">
+        <div class="system">{{ system }}</div>
+      </div>
       <div v-if="username">
         <button @click="save" v-if="!saved" class="save">
           שמור בשם
         </button>
         <button v-if="saved" class="saved">נשמר</button>
-        <router-link to="/" v-if="!saved" class="DontSave"
+        <router-link :to="{ name: 'home', query: { id: this.id } }" v-if="!saved" class="DontSave"
           >אל תשמור</router-link
         >
       </div>
-      <div v-if="!username">
-        <p>
+      <div v-if="falseuser" class="username">
+        <p class="bishvil">
           בשביל לשמור את הקבוצה ולהשתמש בה שוב ושוב יש
           <button
             @click="
@@ -94,16 +110,16 @@
           <input type="email" class="Semail" />
           <label>סיסמא:</label>
           <input type="password" class="Spassword" />
-          <div>{{ Msign }}</div>
+          <div class="email">{{ Msign }}</div>
           <button @click="sign">הירשם</button>
         </div>
         <div class="sign login" v-if="log">
-          <p>יש לך כבר משתמש קיים?</p>
+          <p>התחבר</p>
           <label>שם משתמש:</label>
           <input type="text" class="Lusername" />
           <label>סיסמא:</label>
           <input type="password" class="Lpassword" />
-          <div>{{ Mlogin }}</div>
+          <div class="Mlogin">{{ Mlogin }}</div>
           <button @click="login">התחבר</button>
           <p class="forgot">שכחת את הסיסמא?</p>
         </div>
@@ -149,9 +165,11 @@ export default {
       run: 1,
       names: [],
       username: false,
+      falseuser:false,
       Susername: "",
       aviable: "",
-      CheckUser: false
+      CheckUser: false,
+      system: ""
     };
   },
   created() {
@@ -159,10 +177,18 @@ export default {
   },
   mounted() {
     console.log(this.id);
-    if (this.id !== 0) {
-      this.username = true;
-      console.log(this.username);
-    }
+    const path = `http://localhost:5000/user/${this.id}`;
+    this.$http.get(path).then(res => {
+      if (res.data.login == "True") {
+        this.username = true;
+        this.falseuser= false;
+        console.log(res.data);
+      } else {
+        this.username = false;
+        this.falseuser= true;
+        console.log(res.data);
+      }
+    });
     console.log(this.id);
     let names = document.querySelector(".names");
     for (let i = 0; i < 2; i++) {
@@ -232,10 +258,11 @@ export default {
           console.log(payload);
           console.log("res");
           console.log(res.data);
-          this.id = res.data.message;
+          this.id = res.data.userInfo
           console.log("id");
           console.log(this.id);
           this.username = true;
+          this.falseuser= false;
           this.Groups = [];
           this.teams = this.Groups;
           this.ex = true;
@@ -252,7 +279,7 @@ export default {
           if (res.data.email == true) {
             this.SignIn(payload);
           } else {
-            this.Msign = "יש כבר משתמש עם המייל הזה";
+            this.Msign = "המייל קיים במערכת";
           }
         })
         .catch(error => {
@@ -290,24 +317,29 @@ export default {
       const payload = {
         username: Lusername.value,
         password: Lpassword.value,
-        get: true
+        login: "True"
       };
       console.log(payload);
       this.Log(payload);
     },
     Log(payload) {
-      const path = `http://localhost:5000/groups`;
+      const path = `http://localhost:5000/login`;
       this.$http
         .post(path, payload)
         .then(res => {
-          if (res.data.message == "not vaild useranme") {
+          console.log(res.data);
+          if (res.data.message == "not vaild username") {
             this.Mlogin = "שם משתמש לא קיים במערכת";
             console.log("hello");
-          } else if (res.data.message == "worng password") {
+          } else if (res.data.message == "wrong password") {
             this.Mlogin = "שם משתמש או סיסמא לא נכונים";
           } else {
+            console.log(res);
             this.Mlogin = "";
             this.username = true;
+            this.falseuser= false;
+            this.id = res.data.userInfo;
+            console.log(this.id);
           }
         })
         .catch(error => {
@@ -424,36 +456,35 @@ export default {
           this.minute1[i] = "0" + this.minute1[i];
         }
         let div = document.createElement("DIV");
+        div.className = "result1";
         result.appendChild(div);
         if (i == 0) {
           div.innerHTML =
             randomize[i].name +
             " " +
-            this.start +
-            " - " +
             this.hour1[i] +
             ":" +
-            this.minute1[i];
+            this.minute1[i] +
+            " - " + this.start 
         } else if (i == this.arr.length - 1) {
           div.innerHTML =
             randomize[i].name +
             " " +
+            this.end +  " - " +
             this.hour1[i - 1] +
             ":" +
-            this.minute1[i - 1] +
-            " - " +
-            this.end;
+            this.minute1[i - 1]
         } else {
           div.innerHTML =
             randomize[i].name +
             " " +
-            this.hour1[i - 1] +
-            ":" +
-            this.minute1[i - 1] +
-            " - " +
             this.hour1[i] +
             ":" +
-            this.minute1[i];
+            this.minute1[i] +
+            " - " +
+            this.hour1[i - 1] +
+            ":" +
+            this.minute1[i - 1];
         }
       }
       randomize[0].fl = 1;
@@ -466,6 +497,7 @@ export default {
       let run = document.createElement("DIV");
       run.innerHTML = "סבב: 1";
       result.appendChild(run);
+      this.system = "רשימה רנדומלית";
     },
     Allrandom() {
       this.MakeArray();
@@ -484,7 +516,7 @@ export default {
         }
         this.results = true;
         let result = document.querySelector(".result");
-        for (let i = 0; i < this.arr.length; i++) {
+       for (let i = 0; i < this.arr.length; i++) {
           if (this.hour1[i] < 10) {
             this.hour1[i] = "0" + this.hour1[i];
           }
@@ -492,36 +524,36 @@ export default {
             this.minute1[i] = "0" + this.minute1[i];
           }
           let div = document.createElement("DIV");
+          div.className = "result1";
           result.appendChild(div);
           if (i == 0) {
             div.innerHTML =
               this.arr[i].name +
               " " +
-              this.start +
-              " - " +
               this.hour1[i] +
               ":" +
-              this.minute1[i];
+              this.minute1[i] +
+              " - " +
+              this.start 
           } else if (i == this.arr.length - 1) {
             div.innerHTML =
               this.arr[i].name +
-              " " +
+              " " + 
+              this.end +  " - " +
               this.hour1[i - 1] +
               ":" +
-              this.minute1[i - 1] +
-              " - " +
-              this.end;
+              this.minute1[i - 1]
           } else {
             div.innerHTML =
               this.arr[i].name +
               " " +
-              this.hour1[i - 1] +
-              ":" +
-              this.minute1[i - 1] +
-              " - " +
               this.hour1[i] +
               ":" +
-              this.minute1[i];
+              this.minute1[i] +
+              " - " +
+              this.hour1[i-1] +
+              ":" +
+              this.minute1[i-1];
           }
         }
         this.arr[0].fl = 1;
@@ -529,6 +561,7 @@ export default {
         let run = document.createElement("DIV");
         run.innerHTML = "סבב: 1";
         result.appendChild(run);
+        this.system = "אותו סדר";
       }
     },
     GetGroups() {
@@ -544,11 +577,11 @@ export default {
         });
     },
     AddGroups(payload) {
-      const path = `http://localhost:5000/groups`;
+      const path = `http://localhost:5000/user/${this.id}`;
       this.$http
         .post(path, payload)
         .then(() => {
-          this.GetGroups();
+          console.log("hello");
         })
         .catch(error => {
           console.log(error);
@@ -556,26 +589,39 @@ export default {
         });
     },
     save() {
-      this.GetGroups();
       let group = prompt("איך לקרוא לקבוצה?");
-      this.Group.title = group;
-      this.Group.run = 1;
-      for (let i = 0; i < this.arr.length; i++) {
-        this.name.push(this.arr[i].name);
-        this.fl.push(this.arr[i].fl);
-        this.index.push(this.arr[i].index);
+      if (group != null) {
+        this.Group.title = group;
+        this.Group.run = 1;
+        for (let i = 0; i < this.arr.length; i++) {
+          this.name.push(this.arr[i].name);
+          this.fl.push(this.arr[i].fl);
+          this.index.push(this.arr[i].index);
+        }
+        const payload = {
+          title: this.Group.title,
+          run: this.Group.run,
+          name: this.name,
+          fl: this.fl,
+          index: this.index
+        };
+        this.AddGroups(payload);
+        this.saved = true;
       }
+    },
+    logout() {
       const payload = {
-        title: this.Group.title,
-        run: this.Group.run,
-        name: this.name,
-        fl: this.fl,
-        index: this.index,
-        add: true,
         id: this.id
       };
-      this.AddGroups(payload);
-      this.saved = true;
+      this.out(payload);
+    },
+    out(payload) {
+      const path = `http://localhost:5000/login`;
+      this.$http.post(path, payload).then(() => {
+        this.id = 0;
+        this.username = false;
+        this.falseuser= true;
+      });
     }
   }
 };
@@ -612,7 +658,7 @@ p {
 .button {
   margin-right: 10px;
   padding: 20px;
-  font-size:20px;
+  font-size: 20px;
 }
 .buttons {
   display: block;
@@ -622,26 +668,60 @@ p {
   float: right;
   margin-right: 48%;
   margin-top: 3%;
+  margin-bottom:2%;
 }
 .save {
-  margin-left: 38%;
+  margin-left: 41%;
 }
 .saved {
-  margin-left: 46.5%;
+  margin-left: 47.5%;
+  cursor: default;
+}
+.saved:hover {
+  background-color: #4caf50;
 }
 .DontSave {
-  background-color: #4caf50; /* Green */
+  background-color: #ba4545; /*#b04c4c;#4caf50;*/
   border: none;
   color: white;
-  padding: 15px 40px;
+  padding: 18px 32px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 16px;
+  font-size: 18px;
+  font-family: "Varela Round", sans-serif;
   border-radius: 8px;
   margin-left: 3%;
+  margin-bottom: 2%;
   /*margin-right:50%;*/
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
+}
+.DontSave:hover {
+  background-color: #bf1515; /*#823535;*/
+  color: white;
+}
+.bishvil {
+  text-align: center;
+  /*margin-top: 5%;*/
+}
+.bishvil button {
+}
+.sign {
+  margin-left: 40%;
+}
+.sign p {
+  margin-bottom: 30%;
+  display: block;
+  color: black;
+}
+/*.login forgot{
+  float:left;
+}*/
+.login {
+  margin-top: 0%;
+}
+.username {
+  direction: rtl;
 }
 </style>

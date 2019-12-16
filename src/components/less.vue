@@ -1,6 +1,8 @@
 <template>
   <div>
-    <button @click="$emit('less', id)">-</button>
+    <div class="button" @click="$emit('less', id)">
+      <i class="el-icon-delete"></i>
+    </div>
   </div>
 </template>
 <script>
@@ -9,24 +11,21 @@ export default {
 };
 </script>
 <style scoped>
-button {
-  background-color: #4caf50; /* Green */
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
+div {
+  margin-top: -2.5%;
   display: inline-block;
-  font-size: 16px;
-  border-radius: 8px;
-  margin-left: 47.5%;
-  margin-right: 40%;
-
+  margin-right: 50%;
+}
+.button {
+  text-align: center;
+  display: inline-block;
+  cursor: pointer;
+  /*margin-right: 70%;*/
+  /*margin-bottom: 10%;*/
+  font-size: 35px;
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
 }
 button:hover {
-  background-color: #4e8235;
-  color: white;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="product">
+  <div>
     <button @click="$emit('show-team', id)">{{ group }}</button>
   </div>
 </template>
@@ -9,24 +9,27 @@ export default {
 };
 </script>
 <style scoped>
+div {
+  display: inline-block;
+}
 button {
-  background-color: #4caf50; /* Green */
+  background-color: #fafafa; /*#4e8235;#c29929;  Green */
+  float: center;
   border: none;
-  color: white;
+  color: #4e8235;
   padding: 15px 32px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
   border-radius: 8px;
-  margin-left: 45%;
-  margin-right: 40%;
+  margin-left: 22.5px;
+  margin-bottom: 10%;
 
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
 }
 button:hover {
-  background-color: #4e8235;
-  color: white;
+  background-color: #f0f0f0;
 }
 </style>

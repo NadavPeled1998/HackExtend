@@ -14,7 +14,14 @@
         >צור קשר</router-link
       >
       <router-link to="/about" class="active">מי אנחנו</router-link>
-      <router-link :to="{ name: 'home', query: { id: this.id } }" class="logo"
+      <span v-if="username" @click="logout">התנתק</span>
+       <router-link v-if="falseuser" :to="{ name: 'home', query: { id: this.id } }" class="logo"
+        ><img src="/images\logosh.png" height="18px"
+      /></router-link>
+      <router-link class="signLink" v-if="falseuser" to="/sign">
+        הרשם/התחבר</router-link
+      >
+      <router-link v-if="username" :to="{ name: 'home', query: { id: this.id } }" class="logo"
         ><img src="/images\logosh.png" height="18px"
       /></router-link>
     </div>
@@ -48,11 +55,51 @@ export default {
   name: "Mi",
   data() {
     return {
-      id: 0
+      id: 0,
+      username: false,
+      falseuser: false
     };
   },
   created() {
     this.id = this.$route.query.id;
+  },
+  mounted() {
+    const path = `http://localhost:5000/user/${this.id}`;
+    this.$http
+      .get(path)
+      .then(res => {
+        if (res.data.login == "True") {
+          this.username = true;
+          this.falseuser= false;
+          console.log(this.username);
+          console.log(res.data);
+        } else {
+          this.username = false;
+          this.falseuser= true;
+          console.log(res.data);
+        }
+      })
+      .catch(error => {
+        this.username = false;
+         this.falseuser= true;
+        console.log(error);
+      });
+  },
+  methods: {
+    logout() {
+      const payload = {
+        id: this.id
+      };
+      this.out(payload);
+    },
+    out(payload) {
+      const path = `http://localhost:5000/login`;
+      this.$http.post(path, payload).then(() => {
+        this.id = 0;
+        this.username = false;
+         this.falseuser= true;
+      });
+    }
   }
 };
 </script>
@@ -64,7 +111,7 @@ export default {
   margin-top: 5%;
   border: soild black 1px;
   color: white;
-  font-size: 40px;
+  font-size: 50px;
 }
 h2 {
   margin-bottom: 10%;

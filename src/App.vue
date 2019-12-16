@@ -27,25 +27,28 @@ body {
   overflow: hidden;
   font-family: "Varela Round", sans-serif;
 }
-
 /* Style the links inside the navigation bar */
 .topnav a {
   float: right;
   color: #426811;
   text-align: center;
-  padding: 14px 16px;
+  padding: 12px 16px;
   text-decoration: none;
   font-size: 17px;
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
 }
-
 .topnav a.logo {
   float: left;
+  margin-right: -100%;
+}
+.topnav a.logo:hover {
+  padding-bottom: 0.75%;
 }
 
 /* Change the color of links on hover */
 .topnav a:hover {
+ /* padding-bottom:19.5px;*/
   background-color: #ddd;
   color: black;
   padding-bottom: 19.5px;
@@ -56,6 +59,27 @@ body {
   background-color: #4caf50;
   color: white;
   padding-bottom: 19.5px;
+}
+.topnav span {
+  margin-left: 3.5%;
+  margin-top: 20%;
+  color: #426811;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  cursor: pointer;
+}
+.topnav span:hover {
+  background-color: #ddd;
+  color: black;
+  padding-bottom: 21px;
+}
+.topnav .signLink {
+  float: left;
+  display: inline-block;
+ margin-left:3.5%;
+  cursor: pointer;
 }
 .contentfp {
   display: block;
@@ -76,12 +100,13 @@ button {
   border: none;
   color: white;
   text-align: center;
+  cursor: pointer;
   text-decoration: none;
   display: inline-block;
-  font-size: 16px;
+  font-size: 18px;
   border-radius: 8px;
   padding: 15px 32px;
-  /*font-family: 'Varela Round', sans-serif;
+  font-family: "Varela Round", sans-serif;
 
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
@@ -110,7 +135,7 @@ button:hover {
   border-radius: 8px;
   margin-left: 5%;
   margin-bottom: 2%;
-  margin-right:-1%;
+  margin-right: -1%;
   /*margin-right:50%;*/
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
@@ -184,13 +209,13 @@ button:hover {
 }
 .loya {
   text-align: center;
-  margin-top: 100px;
+  margin-top: 20%;
+  font-size: 65px;
   color: white;
 }
 .members {
   text-align: center;
   color: white;
-  font-size: 50%;
 }
 .memebersh {
   text-align: center;
@@ -198,14 +223,19 @@ button:hover {
 }
 .result {
   text-align: center;
-  margin-top: 100px;
+  margin-top: 5%;
+  margin-bottom: 2.5%;
+  margin-left: 32.5%;
+  margin-right: 32.5%;
+  padding-top: 2.5%;
+  padding-bottom: 2%;
+  background-color: rgba(0, 0, 0, 0.15);
   color: white;
-  font-size: 60%;
+  font-size: 50px;
 }
-.buttons5 {
-  margin-top: 100px;
-  margin-right: 5%;
-  margin-left: 5%;
+.result1 {
+  margin-bottom: 10%;
+  direction: rtl;
 }
 .error {
   border: 5px solid red;
@@ -213,45 +243,85 @@ button:hover {
 .sign {
   display: inline-block;
   text-align: center;
-  background-color: white;
+  background-color: #f9fcf0 ;/*;rgba(255,255,255,0.75);*/
   border-radius: 20px;
   margin-right: 35%;
-  font-size:60px;
+  margin-bottom: 1.5%;
+  font-size: 60px;
 }
 .sign p {
-  margin-bottom: 40%;
-  display:block;
-}
-.sign label {
-  font-size:40px;
-  display:block;
-}
-.sign input {
-  font-size:20px;
-  margin-right: 20%;
-  margin-top: 20%;
-  margin-bottom:10%;
+  margin-bottom: 30%;
   display: block;
 }
-.sign .forgot {
-  float:right;
-  margin-left:20%;
+.sign label {
+  font-size: 40px;
+  display: block;
+  margin-top: 25%;
+  margin-bottom: 25%;
+}
+.sign input {
+  font-size: 20px;
+  margin-right: 20%;/*
+  background-color: #ffff;*/
+  display: block;
+}
+.signin .forgot {
+  float: right;
+  margin-left: 20%;
   margin-bottom: 1%;
   font-size: 13px;
   font-family: "Varela Round", sans-serif;
+  cursor: pointer;
 }
-.sign button{
-  margin-right: 65%;
+.login .forgot {
+  font-size: 13px;
+  font-family: "Varela Round", sans-serif;
+  margin-top: 10%;
+  cursor: pointer;
+}
+.sign button {
+  margin-right: 75%;
+  margin-left: -5%;
+  margin-top: 7.5%;
 }
 .signin {
- padding-bottom: 2.5%;
- padding-right: 5%;
+  padding-bottom: 2.5%;
+  padding-right: 5%;
   padding-left: 7.5%;
 }
 .login {
-  margin-top: 2%;
-  padding-bottom: 2%;
-  padding-right: 5%;
-  padding-left: 10%;
+  margin-right: 35%;
+  margin-top: 2.5%;
+  padding-right: 1.5%;
+  padding-left: 7%;
+  padding-bottom: 1.5%;
+}
+.login button {
+  margin-top: 10%;
+}
+.comment {
+  direction: rtl;
+  font-family: "Varela Round", sans-serif;
+  float: right;
+  margin-top: 5%;
+  margin-bottom: 10%;
+  font-size: 15px;
+  margin-right: 20%;
+  margin-left: -10%;
+}
+.system {
+  font-size: 75px;
+  margin-bottom: 10%;
+}
+.email {
+  color: red;
+  margin-right: 15%;
+  font-size: 15px;
+  font-family: "Varela Round", sans-serif;
+}
+.Mlogin{
+  color:red;
+  font-size:15px;
+  font-family: "Varela Round", sans-serif;
 }
 </style>

@@ -5,7 +5,7 @@ import NewGroup from "../views/NewGroup.vue";
 import ExistingGroup from "../views/ExistingGroup.vue";
 import Contact from "../views/Contact.vue";
 import About from "../views/About.vue";
-import Numbers from "../views/Numbers.vue";
+import Sign from "../views/Sign.vue";
 
 Vue.use(VueRouter);
 
@@ -36,9 +36,9 @@ const routes = [
     component: About
   },
   {
-    path: "/numbers",
-    name: "numbers",
-    component: Numbers
+    path: "/sign",
+    name: "sign",
+    component: Sign
   }
 ];
 
