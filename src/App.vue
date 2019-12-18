@@ -32,7 +32,7 @@ body {
   float: right;
   color: #426811;
   text-align: center;
-  padding: 12px 16px;
+  padding: 13px 16px;
   text-decoration: none;
   font-size: 17px;
   -webkit-transition-duration: 0.4s; /* Safari */
@@ -43,7 +43,7 @@ body {
   margin-right: -100%;
 }
 .topnav a.logo:hover {
-  padding-bottom: 0.75%;
+  padding-bottom: 0.8%;
 }
 
 /* Change the color of links on hover */

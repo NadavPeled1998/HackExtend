@@ -60,22 +60,15 @@ export default {
   },
   mounted() {
     const path = `http://localhost:5000/user/${this.id}`;
-    this.$http
-      .get(path)
-      .then(res => {
-        if (res.data.login == "True") {
-          this.username = true;
-          this.falseuser = false;
-        } else {
-          this.username = false;
-          this.falseuser = true;
-        }
-      })
-      .catch(error => {
+    this.$http.get(path).then(res => {
+      if (res.data.login == "True") {
+        this.username = true;
+        this.falseuser = false;
+      } else {
         this.username = false;
         this.falseuser = true;
-        console.log(error);
-      });
+      }
+    });
   },
   methods: {
     logout() {

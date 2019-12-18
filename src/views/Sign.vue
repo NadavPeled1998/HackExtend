@@ -46,7 +46,13 @@
         <input type="password" class="Spassword" />
         <div class="email">{{ Msign }}</div>
         <button @click="sign">הירשם</button>
-        <p class="forgot" @click="aaa">
+        <p
+          class="forgot"
+          @click="
+            Sign = false;
+            Login = true;
+          "
+        >
           יש לך כבר משתמש?
         </p>
       </div>
@@ -92,7 +98,6 @@ export default {
     };
   },
   mounted() {
-    console.log(this.id);
     const path = `http://localhost:5000/user/${this.id}`;
     this.$http.get(path).then(res => {
       if (res.data.login == "True") {
@@ -123,33 +128,23 @@ export default {
     },
     SignIn(payload) {
       const path = `http://localhost:5000/users`;
-      this.$http
-        .post(path, payload)
-        .then(res => {
-          this.id = res.data.userInfo;
-          this.username = true;
-          this.falseuser = false;
-          this.Groups = [];
-          this.teams = [];
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      this.$http.post(path, payload).then(res => {
+        this.id = res.data.userInfo;
+        this.username = true;
+        this.falseuser = false;
+        this.Groups = [];
+        this.teams = [];
+      });
     },
     CheckEmail(pay, payload) {
       const path = `http://localhost:5000/check`;
-      this.$http
-        .post(path, pay)
-        .then(res => {
-          if (res.data.email == true) {
-            this.SignIn(payload);
-          } else {
-            this.Msign = "המייל קיים במערכת";
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      this.$http.post(path, pay).then(res => {
+        if (res.data.email == true) {
+          this.SignIn(payload);
+        } else {
+          this.Msign = "המייל קיים במערכת";
+        }
+      });
     },
     Check() {
       let Susername = document.querySelector(".Susername").value;
@@ -167,14 +162,9 @@ export default {
     },
     CheckUserName(payload) {
       const path = `http://localhost:5000/check`;
-      this.$http
-        .post(path, payload)
-        .then(res => {
-          this.aviable = res.data.name;
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      this.$http.post(path, payload).then(res => {
+        this.aviable = res.data.name;
+      });
     },
     login() {
       let Lusername = document.querySelector(".Lusername");
@@ -189,24 +179,18 @@ export default {
     },
     Log(payload) {
       const path = `http://localhost:5000/login`;
-      this.$http
-        .post(path, payload)
-        .then(res => {
-          console.log(res.data);
-          if (res.data.message == "not vaild username") {
-            this.Mlogin = "שם משתמש לא קיים במערכת"
-          } else if (res.data.message == "wrong password") {
-            this.Mlogin = "שם משתמש או סיסמא לא נכונים";
-          } else {
-            this.Mlogin = "";
-            this.username = true;
-            this.falseuser = false;
-            this.id = res.data.userInfo;
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      this.$http.post(path, payload).then(res => {
+        if (res.data.message == "not vaild username") {
+          this.Mlogin = "שם משתמש לא קיים במערכת";
+        } else if (res.data.message == "wrong password") {
+          this.Mlogin = "שם משתמש או סיסמא לא נכונים";
+        } else {
+          this.Mlogin = "";
+          this.username = true;
+          this.falseuser = false;
+          this.id = res.data.userInfo;
+        }
+      });
     },
     logout() {
       const payload = {

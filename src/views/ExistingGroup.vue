@@ -237,7 +237,6 @@ export default {
     this.id = this.$route.query.id;
   },
   mounted() {
-    console.log(this.id);
     const path = `http://localhost:5000/user/${this.id}`;
     this.$http
       .get(path)
@@ -251,10 +250,9 @@ export default {
           this.username = false;
         }
       })
-      .catch(error => {
+      .catch(() => {
         this.falseuser = true;
         this.username = false;
-        console.log(error);
       });
   },
   methods: {
@@ -274,9 +272,6 @@ export default {
       let Susername = document.querySelector(".Susername").value;
       let Semail = document.querySelector(".Semail").value;
       let Spassword = document.querySelector(".Spassword").value;
-      console.log(Spassword);
-      console.log(Susername);
-      console.log(Semail);
       const pay = {
         email: Semail,
         gmail: true
@@ -286,40 +281,28 @@ export default {
         password: Spassword,
         email: Semail
       };
-      console.log(payload);
       this.CheckEmail(pay, payload);
     },
     SignIn(payload) {
       const path = `http://localhost:5000/users`;
-      this.$http
-        .post(path, payload)
-        .then(res => {
-          this.username = true;
-          this.falseuser = false;
-          this.id = res.data.userInfo;
-          this.Groups = [];
-          this.teams = [];
-
-          this.ex = true;
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      this.$http.post(path, payload).then(res => {
+        this.username = true;
+        this.falseuser = false;
+        this.id = res.data.userInfo;
+        this.Groups = [];
+        this.teams = [];
+        this.ex = true;
+      });
     },
     CheckEmail(pay, payload) {
       const path = `http://localhost:5000/check`;
-      this.$http
-        .post(path, pay)
-        .then(res => {
-          if (res.data.email == true) {
-            this.SignIn(payload);
-          } else {
-            this.Msign = "המייל קיים במערכת";
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      this.$http.post(path, pay).then(res => {
+        if (res.data.email == true) {
+          this.SignIn(payload);
+        } else {
+          this.Msign = "המייל קיים במערכת";
+        }
+      });
     },
     Check() {
       let Susername = document.querySelector(".Susername").value;
@@ -331,36 +314,25 @@ export default {
           username: Susername,
           name: true
         };
-        console.log(payload);
         this.CheckUserName(payload);
       }
     },
     CheckUserName(payload) {
       const path = `http://localhost:5000/check`;
-      this.$http
-        .post(path, payload)
-        .then(res => {
-          this.aviable = res.data.name;
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      this.$http.post(path, payload).then(res => {
+        this.aviable = res.data.name;
+      });
     },
     GetGroups(id) {
       const path = `http://localhost:5000/groups/${id}`;
-      this.$http
-        .get(path)
-        .then(res => {
-          this.Groups = res.data.groups;
-          this.teams = this.Groups;
-          this.ex = true;
-          if (this.Groups.length > 0) {
-            this.ex = false;
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      this.$http.get(path).then(res => {
+        this.Groups = res.data.groups;
+        this.teams = this.Groups;
+        this.ex = true;
+        if (this.Groups.length > 0) {
+          this.ex = false;
+        }
+      });
     },
     login() {
       let Lusername = document.querySelector(".Lusername");
@@ -370,30 +342,23 @@ export default {
         password: Lpassword.value,
         login: "True"
       };
-      console.log(payload);
       this.Log(payload);
     },
     Log(payload) {
       const path = `http://localhost:5000/login`;
-      this.$http
-        .post(path, payload)
-        .then(res => {
-          console.log(res.data);
-          if (res.data.message == "not vaild username") {
-            this.Mlogin = "שם משתמש לא קיים במערכת";
-          } else if (res.data.message == "wrong password") {
-            this.Mlogin = "שם משתמש או סיסמא לא נכונים";
-          } else {
-            this.Mlogin = "";
-            this.username = true;
-            this.falseuser = false;
-            this.id = res.data.userInfo;
-            this.GetGroups(this.id);
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      this.$http.post(path, payload).then(res => {
+        if (res.data.message == "not vaild username") {
+          this.Mlogin = "שם משתמש לא קיים במערכת";
+        } else if (res.data.message == "wrong password") {
+          this.Mlogin = "שם משתמש או סיסמא לא נכונים";
+        } else {
+          this.Mlogin = "";
+          this.username = true;
+          this.falseuser = false;
+          this.id = res.data.userInfo;
+          this.GetGroups(this.id);
+        }
+      });
     },
     GetMembers(id) {
       const path = `http://localhost:5000/group/${id}`;
@@ -417,7 +382,6 @@ export default {
     },
     Edit() {
       this.edi = true;
-      //this.editor = true;
     },
     EditName(id) {
       if (this.ed) {
@@ -465,86 +429,36 @@ export default {
     },
     UpdateName(payload, ID) {
       const path = `http://localhost:5000/group/${ID}/member`;
-      this.$http
-        .put(path, payload)
-        .then(() => {
-          this.GetGroups();
-        })
-        .catch(error => {
-          console.log(error);
-          this.GetGroups;
-        });
+      this.$http.put(path, payload).then(() => {
+        this.GetGroups(this.g);
+      });
     },
     Add() {
       this.members.unshift({});
     },
     AddName(payload, ID) {
       const path = `http://localhost:5000/group/${ID}`;
-      this.$http
-        .post(path, payload)
-        .then(() => {
-          this.GetMembers(this.g);
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      this.$http.post(path, payload).then(() => {
+        this.GetMembers(this.g);
+      });
     },
-
     less(id) {
       const member = this.members.find(member => member.id == id);
-      console.log(member.id);
-      for (let i = 0; i < this.members.length; i++) {
-        if (this.members[i].id === id) {
-          let sp = this.members.splice(i, 1);
-          console.log(sp)
-        }
-      }
       let inps = document.querySelectorAll(".inp");
-      let inp;
-      console.log(inp)
       if (inps.length > 2) {
-        if (this.l.length < 1) {
-          for (let i = 0; i <= this.members.length; i++) {
-            if (member.id == i) {
-              inp = inps[i - 1];
-              break;
-            } else {
-              continue;
-            }
-          }
-        } else {
-          let x = 1;
-          for (let i = 0; i < this.l.length; i++) {
-            if (member.id > this.l[i]) {
-              x += 1;
-            } else {
-              continue;
-            }
-          }
-          for (let i = 0; i < inps.length; i++) {
-            if (member.id - x == i) {
-              inp = inps[i];
-              break;
-            } else {
-              continue;
-            }
+        for (let i = 0; i < this.members.length; i++) {
+          if (this.members[i].id === id) {
+            this.members.splice(i, 1);
           }
         }
-        this.l.push(member.id);
         this.DeleteName(member.id);
       }
     },
     DeleteName(id) {
       const path = `http://localhost:5000/group/${id}/member`;
-      this.$http
-        .delete(path)
-        .then(() => {
-          this.GetGroups();
-        })
-        .catch(error => {
-          console.log(error);
-          this.GetGroups();
-        });
+      this.$http.delete(path).then(() => {
+        this.GetGroups();
+      });
     },
     DeleteGroup() {
       if (
@@ -557,16 +471,10 @@ export default {
     },
     DG(id) {
       const path = `http://localhost:5000/group/${id}`;
-      this.$http
-        .delete(path)
-        .then(() => {
-          this.GetGroups(this.id);
-          this.n = false;
-        })
-        .catch(error => {
-          console.log(error);
-          this.GetGroups();
-        });
+      this.$http.delete(path).then(() => {
+        this.GetGroups(this.id);
+        this.n = false;
+      });
     },
     Save() {
       if (this.k) {
@@ -637,7 +545,6 @@ export default {
         randomNumbers.unshift(this.arr[i].random);
       }
       randomNumbers.sort();
-      console.log(randomNumbers);
       let randomize = [];
       for (let k = 0; k < this.arr.length; k++) {
         for (let i = 0; i < this.arr.length; i++) {
@@ -706,7 +613,6 @@ export default {
       idid.sort(function(a, b) {
         return a - b;
       });
-      console.log(idid);
       let ind = [];
       for (let k = 0; k < randomize.length; k++)
         for (let i = 0; i < randomize.length; i++) {
@@ -1057,15 +963,9 @@ export default {
     },
     UpdateIndex(payload, ID) {
       const path = `http://localhost:5000/group/${ID}`;
-      this.$http
-        .put(path, payload)
-        .then(() => {
-          this.GetGroups();
-        })
-        .catch(error => {
-          console.log(error);
-          this.GetGroups;
-        });
+      this.$http.put(path, payload).then(() => {
+        this.GetGroups();
+      });
     },
     logout() {
       const payload = {

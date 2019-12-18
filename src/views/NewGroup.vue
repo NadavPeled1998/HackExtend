@@ -250,34 +250,24 @@ export default {
     },
     SignIn(payload) {
       const path = `http://localhost:5000/users`;
-      this.$http
-        .post(path, payload)
-        .then(res => {
-          this.id = res.data.userInfo;
-          this.username = true;
-          this.falseuser = false;
-          this.Groups = [];
-          this.teams = this.Groups;
-          this.ex = true;
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      this.$http.post(path, payload).then(res => {
+        this.id = res.data.userInfo;
+        this.username = true;
+        this.falseuser = false;
+        this.Groups = [];
+        this.teams = this.Groups;
+        this.ex = true;
+      });
     },
     CheckEmail(pay, payload) {
       const path = `http://localhost:5000/check`;
-      this.$http
-        .post(path, pay)
-        .then(res => {
-          if (res.data.email == true) {
-            this.SignIn(payload);
-          } else {
-            this.Msign = "המייל קיים במערכת";
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      this.$http.post(path, pay).then(res => {
+        if (res.data.email == true) {
+          this.SignIn(payload);
+        } else {
+          this.Msign = "המייל קיים במערכת";
+        }
+      });
     },
     Check() {
       let Susername = document.querySelector(".Susername").value;
@@ -294,14 +284,9 @@ export default {
     },
     CheckUserName(payload) {
       const path = `http://localhost:5000/check`;
-      this.$http
-        .post(path, payload)
-        .then(res => {
-          this.aviable = res.data.name;
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      this.$http.post(path, payload).then(res => {
+        this.aviable = res.data.name;
+      });
     },
     login() {
       let Lusername = document.querySelector(".Lusername");
@@ -315,23 +300,18 @@ export default {
     },
     Log(payload) {
       const path = `http://localhost:5000/login`;
-      this.$http
-        .post(path, payload)
-        .then(res => {
-          if (res.data.message == "not vaild username") {
-            this.Mlogin = "שם משתמש לא קיים במערכת";
-          } else if (res.data.message == "wrong password") {
-            this.Mlogin = "שם משתמש או סיסמא לא נכונים";
-          } else {
-            this.Mlogin = "";
-            this.username = true;
-            this.falseuser = false;
-            this.id = res.data.userInfo;
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      this.$http.post(path, payload).then(res => {
+        if (res.data.message == "not vaild username") {
+          this.Mlogin = "שם משתמש לא קיים במערכת";
+        } else if (res.data.message == "wrong password") {
+          this.Mlogin = "שם משתמש או סיסמא לא נכונים";
+        } else {
+          this.Mlogin = "";
+          this.username = true;
+          this.falseuser = false;
+          this.id = res.data.userInfo;
+        }
+      });
     },
     MakeArray() {
       let inputs = document.querySelectorAll(".name");
@@ -555,15 +535,9 @@ export default {
     },
     AddGroups(payload) {
       const path = `http://localhost:5000/user/${this.id}`;
-      this.$http
-        .post(path, payload)
-        .then(() => {
-          console.log("hello");
-        })
-        .catch(error => {
-          console.log(error);
-          this.GetGroups();
-        });
+      this.$http.post(path, payload).then(() => {
+        this.GetGroups();
+      });
     },
     save() {
       let group = prompt("איך לקרוא לקבוצה?");
