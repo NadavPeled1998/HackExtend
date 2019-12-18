@@ -46,6 +46,9 @@
   </div>
 </template>
 <script>
+//import port from "../../server/Server.py";
+
+
 export default {
   name: "contact",
   data() {

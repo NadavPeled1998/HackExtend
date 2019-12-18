@@ -70,7 +70,8 @@ export default {
     this.id = this.$route.query.id;
   },
   mounted() {
-    const path = `http://localhost:5000/user/${this.id}`;
+    const port = process.env.PORT || `http://localhost:5000`;
+    const path = `${port}/user/${this.id}`;
     this.$http
       .get(path)
       .then(res => {

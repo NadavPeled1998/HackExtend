@@ -64,9 +64,11 @@ export default {
         if (res.data.login == "True") {
           this.username = true;
           this.falseuser = false;
+          console.log(res)
         } else {
           this.username = false;
           this.falseuser = true;
+          console.log(res)
         }
       })
       .catch(() => {
