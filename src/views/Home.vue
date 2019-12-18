@@ -69,10 +69,9 @@ export default {
           this.falseuser = true;
         }
       })
-      .catch(error => {
+      .catch(() => {
         this.falseuser = true;
         this.username = false;
-        console.log(error);
       });
   },
   methods: {

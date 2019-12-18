@@ -524,14 +524,9 @@ export default {
     },
     GetGroups() {
       const path = `http://localhost:5000/groups`;
-      this.$http
-        .get(path)
-        .then(res => {
-          this.Groups = res.data.groups;
-        })
-        .catch(e => {
-          console.log(e);
-        });
+      this.$http.get(path).then(res => {
+        this.Groups = res.data.groups;
+      });
     },
     AddGroups(payload) {
       const path = `http://localhost:5000/user/${this.id}`;
